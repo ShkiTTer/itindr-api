@@ -30,7 +30,7 @@ import java.time.LocalDateTime
 /**
  * Application name should be set to project name
  */
-def PROJECT_NAME = "Tinder-Api"
+def PROJECT_NAME = "ITindr-Api"
 String versionFootprint
 File versionPropsFile
 Properties versionProps

@@ -1,1 +1,1 @@
-rootProject.name = "tinder"
+rootProject.name = "itindr"
