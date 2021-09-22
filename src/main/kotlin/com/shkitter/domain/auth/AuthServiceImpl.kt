@@ -45,4 +45,8 @@ class AuthServiceImpl(
     override suspend fun logout(userId: UUID) {
         tokenDataSource.clearAllForUser(userId)
     }
+
+    override suspend fun refreshToken(refreshToken: String): TokenInfo {
+        TODO("Not yet implemented")
+    }
 }

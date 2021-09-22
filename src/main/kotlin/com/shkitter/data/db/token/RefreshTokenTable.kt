@@ -24,6 +24,7 @@ class RefreshTokenEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var userId by RefreshTokenTable.userId
 
     fun toDomain() = RefreshToken(
+        id = id.value,
         token = token,
         expiredAt = DateTimeUtils.fromSeconds(expiredAt),
         userId = userId.value.toString()
