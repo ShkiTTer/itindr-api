@@ -25,6 +25,11 @@ application {
     mainClass.set("com.shkitter.app.ApplicationKt")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
 repositories {
     mavenCentral()
     maven(url = "https://jitpack.io")
@@ -79,5 +84,11 @@ tasks {
             archiveVersion.set("")
             archiveClassifier.set("")
         }
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "11"
     }
 }
