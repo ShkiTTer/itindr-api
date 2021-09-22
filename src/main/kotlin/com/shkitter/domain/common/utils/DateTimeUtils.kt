@@ -11,4 +11,6 @@ object DateTimeUtils {
 
     fun fromSeconds(seconds: Long): ZonedDateTime =
         ZonedDateTime.ofInstant(Instant.ofEpochSecond(seconds), ZoneId.of(UTC))
+
+    fun instantFromSeconds(seconds: Long): Instant = Instant.ofEpochSecond(seconds)
 }

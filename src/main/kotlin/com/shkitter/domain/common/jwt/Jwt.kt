@@ -7,7 +7,6 @@ import com.auth0.jwt.interfaces.Payload
 import com.shkitter.domain.common.utils.DateTimeUtils
 import com.shkitter.domain.token.TokenInfo
 import java.security.SecureRandom
-import java.time.Instant
 import java.util.*
 
 class Jwt(
@@ -32,7 +31,7 @@ class Jwt(
     private fun getExpired(validity: Long) = DateTimeUtils.getCurrentSeconds() + validity
 
     private fun generateAccessToken(userId: String, expired: Long): String = JWT.create()
-        .withExpiresAt(Date.from(Instant.ofEpochMilli(expired)))
+        .withExpiresAt(Date.from(DateTimeUtils.instantFromSeconds(expired)))
         .withSubject(userId)
         .withIssuer(issuer)
         .withClaim(KEY_CLAIM_USER, userId)

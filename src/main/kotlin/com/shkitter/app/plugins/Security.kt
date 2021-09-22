@@ -23,7 +23,7 @@ fun Application.configureSecurity() {
         parametersOf(secret, issuer, accessTokenValiditySeconds, refreshTokenValidity)
     }
 
-    authentication {
+    install(Authentication) {
         jwt {
             verifier(jwt.verifier)
 
@@ -32,5 +32,4 @@ fun Application.configureSecurity() {
             }
         }
     }
-
 }

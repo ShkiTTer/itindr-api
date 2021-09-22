@@ -15,4 +15,9 @@ object AuthV1 : Route {
         override val name: String = "register"
         override val parent: Route = AuthV1
     }
+
+    object Logout : Route {
+        override val name: String = "logout"
+        override val parent: Route = AuthV1
+    }
 }

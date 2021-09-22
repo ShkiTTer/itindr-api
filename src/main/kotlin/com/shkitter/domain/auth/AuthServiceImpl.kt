@@ -7,6 +7,7 @@ import com.shkitter.domain.common.utils.HashUtil
 import com.shkitter.domain.token.TokenDataSource
 import com.shkitter.domain.token.TokenInfo
 import com.shkitter.domain.user.UserDataSource
+import java.util.*
 
 class AuthServiceImpl(
     private val tokenDataSource: TokenDataSource,
@@ -39,5 +40,9 @@ class AuthServiceImpl(
         tokenDataSource.saveTokenInfo(userId = newUser.id, tokenInfo = tokenInfo)
 
         return tokenInfo
+    }
+
+    override suspend fun logout(userId: UUID) {
+        tokenDataSource.clearAllForUser(userId)
     }
 }

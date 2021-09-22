@@ -4,4 +4,5 @@ import java.util.*
 
 interface TokenDataSource {
     suspend fun saveTokenInfo(userId: UUID, tokenInfo: TokenInfo)
+    suspend fun clearAllForUser(userId: UUID)
 }
