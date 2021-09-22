@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: Tinder Api
+  description: "Base URL: http://193.38.50.175/tinder/api/mobile"
+  version: 1.0.0
+  contact:
+    email: shkipper65@gmail.com
+    name: ShkiTTer
+servers:
+  - url: 'http://193.38.50.175/tinder/api/mobile'
+    description: 'Mobile'
+
+tags:
+  - name: Auth
+    description: 'Авторизация/регистрация'
+
+paths:
+  /api/v1/auth/login:
+    description: Авторизация
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+            example:
+              email: 'test@mail.ru'
+              password: 'qwerty'
+
+      responses:
+        400:
+          $ref: '#/components/responses/BadRequest'
+      tags:
+        - Auth
+  
+components:
+  schemas:
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+  responses:
+    BadRequest:
+      description: 'Bad Request Error'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: 'Bad Request'

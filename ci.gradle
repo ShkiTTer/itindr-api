@@ -1,0 +1,99 @@
+import java.time.LocalDateTime
+
+/**
+ * This file should be added to /app folder
+ *
+ * Add next code to 'build.gradle' file
+ *  Example of use:
+ *
+ * ```
+ *  apply from: "ci.gradle"
+ *  android {
+ *      defaultConfig {
+ *          readProperties()
+ *          setPropertiesOnBuildServer()
+ *      }
+ *  }
+ * ```
+ *
+ *  Create 'version.properties' file at /app
+ *
+ *  Example of 'version.properties' file:
+ *  ```
+ *  VER_NAME=1.0.0
+ *  VER_CODE=1
+ *  BUILD=35
+ *  ```
+ *
+ */
+
+/**
+ * Application name should be set to project name
+ */
+def PROJECT_NAME = "Tinder-Api"
+String versionFootprint
+File versionPropsFile
+Properties versionProps
+
+/**
+ * This properties will be set from 'version.properties
+ */
+ext {
+    verName = "0.0.0" //Version name which be displayed
+    artifactName = PROJECT_NAME //Apk file name
+    buildNumber = 0
+}
+
+ext.readProperties = {
+    versionPropsFile = file('version.properties')
+    if (versionPropsFile.canRead()) {
+        versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        verName = versionProps['VER_NAME']
+        buildNumber = versionProps['BUILD_NUMBER'].toInteger()
+
+        versionFootprint = "v$verName-$buildNumber"
+        artifactName = "$PROJECT_NAME-$versionFootprint"
+    } else {
+        throw new GradleException("Could not read version.properties!")
+    }
+}
+
+def incrementBuildVersion = {
+    buildNumber++
+}
+
+def writeProperties = {
+    if (versionPropsFile != null && versionPropsFile.canWrite()) {
+        versionProps['BUILD_NUMBER'] = buildNumber.toString()
+        versionProps.store(versionPropsFile.newWriter(), LocalDateTime.now().toString())
+    } else {
+        throw new GradleException("Could not write to version.properties!")
+    }
+}
+
+task buildReleaseAndBumpValues(dependsOn: ["shadowJar"]) {
+    group 'ci'
+
+    def gitRepo = grgit.open(dir: null, currentDir: projectDir, credentials: null)
+    doLast {
+        incrementBuildVersion()
+        writeProperties()
+        def commit = gitRepo.commit {
+            message = "Bump build to $buildNumber"
+            all = true
+        }
+        gitRepo.push() // do not set all: true, see http://ajoberstar.org/grgit/grgit-push.html
+        grgit.tag.add(name: versionFootprint, pointsTo: commit)
+        gitRepo.push(tags: true)
+    }
+}
+
+task testReleaseAndBumpValues(dependsOn: ["shadowJar"]) {
+    group 'ci'
+
+    doLast {
+        incrementBuildVersion()
+        writeProperties()
+    }
+}
