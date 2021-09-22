@@ -1,13 +1,13 @@
 openapi: 3.0.3
 info:
-  title: Tinder Api
-  description: "Base URL: http://193.38.50.175/tinder/api/mobile"
+  title: ITindr Api
+  description: "Base URL: http://193.38.50.175/itindr/api/mobile"
   version: 1.0.0
   contact:
     email: shkipper65@gmail.com
     name: ShkiTTer
 servers:
-  - url: 'http://193.38.50.175/tinder/api/mobile'
+  - url: 'http://193.38.50.175/itindr/api/mobile'
     description: 'Mobile'
 
 tags:
@@ -28,20 +28,86 @@ paths:
               password: 'qwerty'
 
       responses:
+        200:
+          $ref: '#/components/responses/TokenInfo'
         400:
           $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - Auth
+
+  /api/v1/auth/register:
+    description: Регистрация
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+            example:
+              email: 'test@mail.ru'
+              password: 'qwerty'
+
+      responses:
+        200:
+          $ref: '#/components/responses/TokenInfo'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        409:
+          $ref: '#/components/responses/Conflict'
+      tags:
+        - Auth
+
+  /api/v1/auth/logout:
+    description: Выход из аккаунта
+    post:
+      security:
+        - BearerAuth: []
+      responses:
+        204:
+          description: 'Logout succeeded'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        409:
+          $ref: '#/components/responses/Conflict'
       tags:
         - Auth
   
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     LoginBody:
       type: object
       properties:
         email:
           type: string
+          format: email
         password:
           type: string
+          minimum: 8
+      required:
+        - email
+        - password
+
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minimum: 8
       required:
         - email
         - password
@@ -58,3 +124,50 @@ components:
                 type: string
           example:
             message: 'Bad Request'
+
+    NotFound:
+      description: 'Not Found Error'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: 'Resource not found'
+
+    Conflict:
+      description: 'Conflict Error'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: 'Resource already exist'
+
+    TokenInfo:
+      description: 'Token information'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              accessToken:
+                type: string
+              accessTokenExpiredAt:
+                type: integer
+                format: int64
+              refreshToken:
+                type: string
+              refreshTokenExpiredAt:
+                type: integer
+                format: int64
+          example:
+            accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+            accessTokenExpiredAt: 1632325306
+            refreshToken: 'a3dWTmJDQkVuQlNHNGRvWU9LZW4='
+            refreshTokenExpiredAt: 1632325306
