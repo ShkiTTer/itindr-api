@@ -8,3 +8,6 @@ import io.ktor.response.*
 suspend fun ApplicationCall.respondError(status: HttpStatusCode, message: String?) {
     this.respond(status, Response.ErrorResponse(message = message))
 }
+
+suspend inline fun <reified T : Any> ApplicationCall.respondSuccess(message: T) =
+    this.respond(status = HttpStatusCode.OK, message = message)

@@ -1,9 +1,8 @@
 package com.shkitter.app.plugins
 
 import com.shkitter.app.common.extensions.getConfigProperty
-import com.shkitter.app.common.extensions.getConfigPropertyOrNull
-import com.shkitter.app.common.locations.MobileApi
 import com.shkitter.app.routing.auth.configureAuthRouting
+import com.shkitter.app.routing.common.Route
 import io.ktor.application.*
 import io.ktor.locations.*
 import io.ktor.response.*
@@ -17,8 +16,11 @@ fun Application.configureRouting() {
     val rootPath = getConfigProperty(KEY_ROOT_PATH)
 
     routing {
-        get<MobileApi.Docs> {
-            call.respondRedirect(url = "${rootPath}docs/index.html?url=${rootPath}static/tinder-api.yaml", permanent = true)
+        get(Route.Docs.getPath()) {
+            call.respondRedirect(
+                url = "${rootPath}docs/index.html?url=${rootPath}static/tinder-api.yaml",
+                permanent = true
+            )
         }
 
         configureAuthRouting()

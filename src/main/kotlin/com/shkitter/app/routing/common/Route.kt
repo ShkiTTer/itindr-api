@@ -28,4 +28,9 @@ interface Route {
         override val name: String = "v1"
         override val parent: Route = Mobile
     }
+
+    object Docs : Route {
+        override val name: String = "docs"
+        override val parent: Route = Mobile
+    }
 }

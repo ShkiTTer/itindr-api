@@ -20,6 +20,4 @@ fun Application.module() {
     configureMonitoring()
     configureSerialization()
     configureStatusPages()
-
-    println(AuthV1.Login.getPath())
 }

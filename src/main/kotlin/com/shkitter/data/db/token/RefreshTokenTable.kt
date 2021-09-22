@@ -17,7 +17,7 @@ object RefreshTokenTable : UUIDTable(name = "refresh_token") {
 }
 
 class RefreshTokenEntity(id: EntityID<UUID>) : UUIDEntity(id) {
-    private companion object : UUIDEntityClass<RefreshTokenEntity>(RefreshTokenTable)
+    companion object : UUIDEntityClass<RefreshTokenEntity>(RefreshTokenTable)
 
     var token by RefreshTokenTable.token
     var expiredAt by RefreshTokenTable.expiredAt

@@ -1,9 +1,9 @@
 package com.shkitter.app.plugins
 
-import com.shkitter.app.jwt.Jwt
-import com.shkitter.domain.common.utils.SystemEnvVariablesUtil
 import com.shkitter.app.common.extensions.getConfigProperty
 import com.shkitter.app.common.extensions.getConfigPropertyOrNull
+import com.shkitter.domain.common.jwt.Jwt
+import com.shkitter.domain.common.utils.SystemEnvVariablesUtil
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -28,7 +28,7 @@ fun Application.configureSecurity() {
             verifier(jwt.verifier)
 
             validate { credential ->
-                jwt.getUserDataFromPayload(credential)?.let { UserIdPrincipal(it) }
+                jwt.getUserDataFromPayload(credential.payload)?.let { UserIdPrincipal(it) }
             }
         }
     }

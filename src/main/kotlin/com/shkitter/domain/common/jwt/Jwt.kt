@@ -1,11 +1,11 @@
-package com.shkitter.app.jwt
+package com.shkitter.domain.common.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.Payload
 import com.shkitter.domain.common.utils.DateTimeUtils
 import com.shkitter.domain.token.TokenInfo
-import io.ktor.auth.jwt.*
 import java.security.SecureRandom
 import java.time.Instant
 import java.util.*
@@ -58,6 +58,5 @@ class Jwt(
         )
     }
 
-    fun getUserDataFromPayload(credentials: JWTCredential): String? =
-        credentials.payload.claims?.get(KEY_CLAIM_USER)?.asString()
+    fun getUserDataFromPayload(payload: Payload): String? = payload.claims?.get(KEY_CLAIM_USER)?.asString()
 }

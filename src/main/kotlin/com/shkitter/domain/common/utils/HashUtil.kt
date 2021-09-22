@@ -10,7 +10,6 @@ object HashUtil {
 
     fun hash(input: String, salt: ByteArray): String {
         if (salt.isEmpty() || input == "") throw Exception("Password secure error")
-
         return hashString(hashString(input, salt), salt)
     }
 

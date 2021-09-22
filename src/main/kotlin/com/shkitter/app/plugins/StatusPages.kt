@@ -1,8 +1,10 @@
 package com.shkitter.app.plugins
 
-import com.shkitter.app.common.exceptions.AuthenticationException
-import com.shkitter.app.common.exceptions.ForbiddenException
 import com.shkitter.app.common.extensions.respondError
+import com.shkitter.domain.common.exceptions.AuthenticationException
+import com.shkitter.domain.common.exceptions.BadRequestException
+import com.shkitter.domain.common.exceptions.ForbiddenException
+import com.shkitter.domain.common.exceptions.NotFoundException
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -25,7 +27,7 @@ fun Application.configureStatusPages() {
             call.respondError(HttpStatusCode.Forbidden, it.message)
         }
 
-        exception<Throwable> {
+        exception<Exception> {
             call.respondError(HttpStatusCode.InternalServerError, it.message)
         }
     }
