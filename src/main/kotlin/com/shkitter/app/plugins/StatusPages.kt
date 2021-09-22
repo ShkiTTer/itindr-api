@@ -1,9 +1,8 @@
 package com.shkitter.app.plugins
 
 import com.shkitter.app.common.extensions.respondError
-import com.shkitter.domain.common.exceptions.AuthenticationException
+import com.shkitter.domain.common.exceptions.*
 import com.shkitter.domain.common.exceptions.BadRequestException
-import com.shkitter.domain.common.exceptions.ForbiddenException
 import com.shkitter.domain.common.exceptions.NotFoundException
 import io.ktor.application.*
 import io.ktor.features.*
@@ -25,6 +24,10 @@ fun Application.configureStatusPages() {
 
         exception<ForbiddenException> {
             call.respondError(HttpStatusCode.Forbidden, it.message)
+        }
+
+        exception<ResourceAlreadyExistException> {
+            call.respondError(HttpStatusCode.Conflict, it.message)
         }
 
         exception<Exception> {

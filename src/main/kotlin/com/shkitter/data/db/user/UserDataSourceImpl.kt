@@ -10,4 +10,12 @@ class UserDataSourceImpl(private val db: Database) : UserDataSource, DatabaseDat
     override suspend fun getUserByEmail(email: String): User? = db.dbQuery {
         UserEntity.find { UserTable.email like email }.firstOrNull()
     }?.toDomain()
+
+    override suspend fun createNewUser(email: String, password: String, salt: ByteArray) = db.dbQuery {
+        UserEntity.new {
+            this.email = email
+            this.password = password
+            this.salt = salt
+        }
+    }.toDomain()
 }

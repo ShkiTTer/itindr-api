@@ -1,13 +1,13 @@
 package com.shkitter.app.di
 
 import com.shkitter.data.db.Database
-import com.shkitter.data.db.auth.AuthDataSourceImpl
+import com.shkitter.data.db.token.TokenDataSourceImpl
 import com.shkitter.data.db.user.UserDataSourceImpl
-import com.shkitter.domain.auth.AuthDataSource
 import com.shkitter.domain.auth.AuthService
 import com.shkitter.domain.auth.AuthServiceImpl
 import com.shkitter.domain.common.jwt.Jwt
 import com.shkitter.domain.common.utils.SystemEnvVariablesUtil
+import com.shkitter.domain.token.TokenDataSource
 import com.shkitter.domain.user.UserDataSource
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
@@ -27,11 +27,11 @@ object KoinModules {
 
     private val dataSourceModule = module {
         factory<UserDataSource> { UserDataSourceImpl(db = get()) }
-        factory<AuthDataSource> { AuthDataSourceImpl(db = get()) }
+        factory<TokenDataSource> { TokenDataSourceImpl(db = get()) }
     }
 
     private val serviceModule = module {
-        factory<AuthService> { AuthServiceImpl(authDataSource = get(), userDataSource = get(), jwt = get()) }
+        factory<AuthService> { AuthServiceImpl(tokenDataSource = get(), userDataSource = get(), jwt = get()) }
     }
 
     private val jwtModule = module {
