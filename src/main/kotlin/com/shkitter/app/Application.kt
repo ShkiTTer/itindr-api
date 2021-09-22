@@ -1,6 +1,7 @@
 package com.shkitter.app
 
 import com.shkitter.app.plugins.*
+import com.shkitter.app.routing.auth.AuthV1
 import io.ktor.application.*
 import io.ktor.locations.*
 import io.ktor.server.netty.*
@@ -19,4 +20,6 @@ fun Application.module() {
     configureMonitoring()
     configureSerialization()
     configureStatusPages()
+
+    println(AuthV1.Login.getPath())
 }
