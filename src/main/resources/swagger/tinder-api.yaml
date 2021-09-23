@@ -15,7 +15,7 @@ tags:
     description: 'Авторизация/регистрация'
 
 paths:
-  /api/v1/auth/login:
+  /v1/auth/login:
     description: Авторизация
     post:
       requestBody:
@@ -37,7 +37,7 @@ paths:
       tags:
         - Auth
 
-  /api/v1/auth/register:
+  /v1/auth/register:
     description: Регистрация
     post:
       requestBody:
@@ -61,7 +61,7 @@ paths:
       tags:
         - Auth
 
-  /api/v1/auth/logout:
+  /v1/auth/logout:
     description: Выход из аккаунта
     post:
       security:
@@ -78,7 +78,7 @@ paths:
       tags:
         - Auth
 
-  /api/v1/auth/refresh:
+  /v1/auth/refresh:
     description: Обновление Access-токена с помощью Refresh-токена
     post:
       security:
