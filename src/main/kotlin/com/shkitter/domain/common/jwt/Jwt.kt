@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.Payload
 import com.shkitter.domain.common.utils.DateTimeUtils
+import com.shkitter.domain.token.RefreshToken
 import com.shkitter.domain.token.TokenInfo
 import java.security.SecureRandom
 import java.util.*
@@ -58,4 +59,6 @@ class Jwt(
     }
 
     fun getUserDataFromPayload(payload: Payload): String? = payload.claims?.get(KEY_CLAIM_USER)?.asString()
+
+    fun isRefreshTokenNotExpired(refreshToken: RefreshToken): Boolean = DateTimeUtils.getNow() < refreshToken.expiredAt
 }

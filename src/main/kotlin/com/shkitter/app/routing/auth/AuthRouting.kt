@@ -30,15 +30,17 @@ fun Routing.configureAuthRouting() {
         call.respondSuccess(TokenResponse.fromDomain(tokenInfo))
     }
 
-    post(AuthV1.Refresh.getPath()) {
-        val request = call.receiveOrThrow<RefreshTokenRequestDto>().validateAndConvertToVerified()
-    }
-
     authenticate {
         post(AuthV1.Logout.getPath()) {
             val userId = call.principalUserIdOrThrow()
             authService.logout(userId)
             call.respondSuccessEmpty()
+        }
+
+        post(AuthV1.Refresh.getPath()) {
+            val request = call.receiveOrThrow<RefreshTokenRequestDto>().validateAndConvertToVerified()
+            val tokenInfo = authService.refreshToken(refreshToken = request.refreshToken)
+            call.respondSuccess(TokenResponse.fromDomain(tokenInfo))
         }
     }
 }

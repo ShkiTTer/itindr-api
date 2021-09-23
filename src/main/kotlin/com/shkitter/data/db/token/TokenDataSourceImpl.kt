@@ -27,10 +27,9 @@ class TokenDataSourceImpl(private val db: Database) : TokenDataSource, DatabaseD
         RefreshTokenEntity.find { RefreshTokenTable.userId eq userId }.forEach { it.delete() }
     }
 
-    override suspend fun findTokenByValue(refreshToken: String): RefreshToken = db.dbQuery {
+    override suspend fun findTokenByValue(refreshToken: String): RefreshToken? = db.dbQuery {
         RefreshTokenEntity.find { RefreshTokenTable.token like refreshToken }.firstOrNull()
-            ?: throw NotFoundException("User is not found")
-    }.toDomain()
+    }?.toDomain()
 
     override suspend fun removeToken(refreshTokenId: UUID) = db.dbQuery {
         RefreshTokenEntity.findById(refreshTokenId)?.delete() ?: throw NotFoundException("Token is not found")

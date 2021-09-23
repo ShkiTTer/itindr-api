@@ -6,5 +6,5 @@ interface TokenDataSource {
     suspend fun saveTokenInfo(userId: UUID, tokenInfo: TokenInfo)
     suspend fun clearAllForUser(userId: UUID)
     suspend fun removeToken(refreshTokenId: UUID)
-    suspend fun findTokenByValue(refreshToken: String): RefreshToken
+    suspend fun findTokenByValue(refreshToken: String): RefreshToken?
 }

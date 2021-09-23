@@ -7,5 +7,5 @@ data class RefreshToken(
     val id: UUID,
     val token: String,
     val expiredAt: ZonedDateTime,
-    val userId: String
+    val userId: UUID
 )

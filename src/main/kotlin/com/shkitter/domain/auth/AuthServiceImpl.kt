@@ -1,5 +1,6 @@
 package com.shkitter.domain.auth
 
+import com.shkitter.domain.common.exceptions.ForbiddenException
 import com.shkitter.domain.common.exceptions.NotFoundException
 import com.shkitter.domain.common.exceptions.ResourceAlreadyExistException
 import com.shkitter.domain.common.jwt.Jwt
@@ -47,6 +48,15 @@ class AuthServiceImpl(
     }
 
     override suspend fun refreshToken(refreshToken: String): TokenInfo {
-        TODO("Not yet implemented")
+        val existToken = tokenDataSource.findTokenByValue(refreshToken = refreshToken)
+            ?: throw NotFoundException("Session is not found")
+        tokenDataSource.removeToken(refreshTokenId = existToken.id)
+
+        if (!jwt.isRefreshTokenNotExpired(existToken)) throw ForbiddenException("Not enough rights to perform the action")
+
+        val newToken = jwt.newToken(userId = existToken.userId.toString())
+        tokenDataSource.saveTokenInfo(userId = existToken.userId, tokenInfo = newToken)
+
+        return newToken
     }
 }

@@ -11,7 +11,7 @@ object Database {
         this.password = dbPassword
         driverClassName = "org.postgresql.Driver"
         isAutoCommit = true
-        maximumPoolSize = 15
+        maximumPoolSize = 10
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         validate()
     }

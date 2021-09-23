@@ -27,6 +27,6 @@ class RefreshTokenEntity(id: EntityID<UUID>) : UUIDEntity(id) {
         id = id.value,
         token = token,
         expiredAt = DateTimeUtils.fromSeconds(expiredAt),
-        userId = userId.value.toString()
+        userId = userId.value
     )
 }

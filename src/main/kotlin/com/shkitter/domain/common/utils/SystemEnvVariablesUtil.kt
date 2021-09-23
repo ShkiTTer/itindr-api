@@ -11,7 +11,7 @@ object SystemEnvVariablesUtil {
     private const val KEY_DATABASE_PASSWORD = "TINDER_DATABASE_PASSWORD"
 
     private val DEFAULT_ACCESS_TOKEN_VALIDITY_IN_SECONDS = TimeUnit.HOURS.toSeconds(1)
-    private val DEFAULT_REFRESH_TOKEN_VALIDITY_IN_SECONDS = TimeUnit.DAYS.toSeconds(30)
+    private val DEFAULT_REFRESH_TOKEN_VALIDITY_IN_SECONDS = TimeUnit.DAYS.toSeconds(7)
 
     val accessTokenValidityInSeconds =
         System.getenv(KEY_ACCESS_TOKEN_VALIDITY_IN_HOURS)?.toLongOrNull()?.let { TimeUnit.HOURS.toSeconds(it) }
