@@ -7,8 +7,7 @@ info:
     email: shkipper65@gmail.com
     name: ShkiTTer
 servers:
-  - url: 'http://193.38.50.175/itindr/api/mobile'
-    description: 'Mobile'
+  - url: '/itindr/api/mobile'
 
 tags:
   - name: Auth
