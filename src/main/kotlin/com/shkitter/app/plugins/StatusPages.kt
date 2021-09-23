@@ -1,6 +1,5 @@
 package com.shkitter.app.plugins
 
-import com.auth0.jwt.exceptions.JWTVerificationException
 import com.shkitter.app.common.extensions.respondError
 import com.shkitter.domain.common.exceptions.*
 import com.shkitter.domain.common.exceptions.BadRequestException
