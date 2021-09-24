@@ -1,8 +1,8 @@
 package com.shkitter.domain.profile
 
-import com.shkitter.domain.profile.model.Profile
+import com.shkitter.domain.profile.model.ProfileWithTopics
 import java.util.*
 
 interface ProfileService {
-    suspend fun getProfileByUserId(userId: UUID): Profile
+    suspend fun getFullProfileByUserId(userId: UUID): ProfileWithTopics
 }

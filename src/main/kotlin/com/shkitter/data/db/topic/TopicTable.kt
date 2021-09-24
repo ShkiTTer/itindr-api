@@ -18,6 +18,6 @@ class TopicEntity(id: EntityID<UUID>) : UUIDEntity(id) {
 
     fun toDomain() = Topic(
         id = id.value,
-        name = topicTitle
+        title = topicTitle
     )
 }
