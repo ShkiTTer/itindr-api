@@ -1,2 +1,2 @@
-create table users (id uuid primary key, email varchar(255), password varchar(255), salt bytea);
-create table refresh_token (id uuid primary key, token varchar (255), expired_at bigint, user_id uuid references users (id) on delete cascade);
+create table users (id uuid primary key, email varchar(255) not null, password varchar(255) not null, salt bytea not null);
+create table refresh_token (id uuid primary key, token varchar (255) not null, expired_at bigint not null, user_id uuid references users (id) on delete cascade);
