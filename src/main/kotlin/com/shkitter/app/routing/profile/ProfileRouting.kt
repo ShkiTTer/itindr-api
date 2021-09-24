@@ -20,6 +20,10 @@ fun Routing.configureProfile() {
                 val fullProfile = profileService.getFullProfileByUserId(userId = userId)
                 call.respondSuccess(ProfileWithTopicsResponse.fromDomain(fullProfile))
             }
+
+            post {
+                val userId = call.principalUserIdOrThrow()
+            }
         }
     }
 }

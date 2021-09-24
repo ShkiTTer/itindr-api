@@ -3,15 +3,19 @@ package com.shkitter.app.di
 import com.shkitter.data.db.Database
 import com.shkitter.data.db.profile.ProfileDataSourceImpl
 import com.shkitter.data.db.token.TokenDataSourceImpl
+import com.shkitter.data.db.topic.TopicDataSourceImpl
 import com.shkitter.data.db.user.UserDataSourceImpl
+import com.shkitter.data.files.FilesDataSourceImpl
 import com.shkitter.domain.auth.AuthService
 import com.shkitter.domain.auth.AuthServiceImpl
 import com.shkitter.domain.common.jwt.Jwt
 import com.shkitter.domain.common.utils.SystemEnvVariablesUtil
+import com.shkitter.domain.files.FilesDataSource
 import com.shkitter.domain.profile.ProfileDataSource
 import com.shkitter.domain.profile.ProfileService
 import com.shkitter.domain.profile.ProfileServiceImpl
 import com.shkitter.domain.token.TokenDataSource
+import com.shkitter.domain.topic.TopicDataSource
 import com.shkitter.domain.user.UserDataSource
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
@@ -33,20 +37,33 @@ object KoinModules {
         factory<UserDataSource> { UserDataSourceImpl(db = get()) }
         factory<TokenDataSource> { TokenDataSourceImpl(db = get()) }
         factory<ProfileDataSource> { ProfileDataSourceImpl(db = get()) }
+        factory<TopicDataSource> { TopicDataSourceImpl(db = get()) }
+        factory<FilesDataSource> {
+            FilesDataSourceImpl(
+                storePath = SystemEnvVariablesUtil.filesStorePath
+            )
+        }
     }
 
     private val serviceModule = module {
         factory<AuthService> { AuthServiceImpl(tokenDataSource = get(), userDataSource = get(), jwt = get()) }
-        factory<ProfileService> { ProfileServiceImpl(profileDataSource = get(), userDataSource = get()) }
+        factory<ProfileService> {
+            ProfileServiceImpl(
+                profileDataSource = get(),
+                userDataSource = get(),
+                topicDataSource = get(),
+                filesDataSource = get()
+            )
+        }
     }
 
     private val jwtModule = module {
-        single { (secret: String, issuer: String, accessTokenValiditySeconds: Long, refreshTokenValiditySeconds: Long) ->
+        single { (secret: String, issuer: String) ->
             Jwt(
                 secret = secret,
-                accessTokenValiditySeconds = accessTokenValiditySeconds,
-                refreshTokenValiditySeconds = refreshTokenValiditySeconds,
-                issuer = issuer
+                issuer = issuer,
+                accessTokenValiditySeconds = SystemEnvVariablesUtil.accessTokenValidityInSeconds,
+                refreshTokenValiditySeconds = SystemEnvVariablesUtil.refreshTokenValidityInSeconds
             )
         }
     }

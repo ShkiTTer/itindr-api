@@ -10,6 +10,8 @@ object SystemEnvVariablesUtil {
     private const val KEY_DATABASE_USER = "TINDER_DATABASE_USER"
     private const val KEY_DATABASE_PASSWORD = "TINDER_DATABASE_PASSWORD"
 
+    private const val KEY_FILES_STORE_PATH = "FILE_STORE_PATH"
+
     private val DEFAULT_ACCESS_TOKEN_VALIDITY_IN_SECONDS = TimeUnit.HOURS.toSeconds(1)
     private val DEFAULT_REFRESH_TOKEN_VALIDITY_IN_SECONDS = TimeUnit.DAYS.toSeconds(7)
 
@@ -24,4 +26,6 @@ object SystemEnvVariablesUtil {
     val jdbcUrl: String = System.getenv(KEY_JDBC_URL)
     val dbUser: String = System.getenv(KEY_DATABASE_USER)
     val dbPassword: String = System.getenv(KEY_DATABASE_PASSWORD)
+
+    val filesStorePath: String = System.getenv(KEY_FILES_STORE_PATH)
 }

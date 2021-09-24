@@ -21,11 +21,9 @@ private const val KEY_JWT_SECRET = "jwt.secret"
 fun Application.configureSecurity() {
     val issuer = getConfigPropertyOrNull(KEY_JWT_ISSUER).orEmpty()
     val secret = getConfigProperty(KEY_JWT_SECRET)
-    val accessTokenValiditySeconds = SystemEnvVariablesUtil.accessTokenValidityInSeconds
-    val refreshTokenValidity = SystemEnvVariablesUtil.refreshTokenValidityInSeconds
 
     val jwt by inject<Jwt> {
-        parametersOf(secret, issuer, accessTokenValiditySeconds, refreshTokenValidity)
+        parametersOf(secret, issuer)
     }
 
     install(Authentication) {
