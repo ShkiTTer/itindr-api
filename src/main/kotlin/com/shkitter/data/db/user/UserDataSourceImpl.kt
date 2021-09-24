@@ -4,6 +4,7 @@ import com.shkitter.data.db.common.extensions.DatabaseDataSource
 import com.shkitter.domain.user.User
 import com.shkitter.domain.user.UserDataSource
 import org.jetbrains.exposed.sql.Database
+import java.util.*
 
 class UserDataSourceImpl(private val db: Database) : UserDataSource, DatabaseDataSource {
 
@@ -18,4 +19,8 @@ class UserDataSourceImpl(private val db: Database) : UserDataSource, DatabaseDat
             this.salt = salt
         }
     }.toDomain()
+
+    override suspend fun getUserById(userId: UUID): User? = db.dbQuery {
+        UserEntity.findById(userId)
+    }?.toDomain()
 }
