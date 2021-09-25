@@ -11,15 +11,12 @@ servers:
 
 tags:
   - name: Auth
-    description: 'Авторизация/регистрация'
   - name: Profile
-    description: Профиль пользователя
   - name: Topic
-    description: Интересы
 
 paths:
   /v1/auth/login:
-    description: Авторизация
+    description: 'Authorization'
     post:
       requestBody:
         required: true
@@ -44,7 +41,7 @@ paths:
         - Auth
 
   /v1/auth/register:
-    description: Регистрация
+    description: 'Registration'
     post:
       requestBody:
         required: true
@@ -69,7 +66,7 @@ paths:
         - Auth
 
   /v1/auth/logout:
-    description: Выход из аккаунта
+    description: 'Sign out of your account'
     post:
       security:
         - BearerAuth: [ ]
@@ -86,7 +83,7 @@ paths:
         - Auth
 
   /v1/auth/refresh:
-    description: Обновление Access-токена с помощью Refresh-токена
+    description: 'Refreshing Access token with Refresh token'
     post:
       security:
         - BearerAuth: [ ]
@@ -116,7 +113,7 @@ paths:
 
   /v1/profile:
     get:
-      description: Получение информаии о профиле пользователя
+      description: 'Retrieving User Profile Information'
       security:
         - BearerAuth: [ ]
       responses:
@@ -136,7 +133,7 @@ paths:
         - Profile
 
     patch:
-      description: Создание профиля пользователя
+      description: 'Updating user profile'
       security:
         - BearerAuth: [ ]
       requestBody:
@@ -167,7 +164,7 @@ paths:
 
   /v1/profile/avatar:
     post:
-      description: 'Загрузка аватара пользователя'
+      description: 'Uploading user avatar'
       security:
         - BearerAuth: [ ]
       requestBody:
@@ -184,7 +181,7 @@ paths:
                 - avatar
       responses:
         204:
-          description: 'Аватар успешно загружен'
+          description: 'Avatar uploaded successfully'
         400:
           $ref: '#/components/responses/BadRequest'
         401:
@@ -200,7 +197,7 @@ paths:
 
   /v1/topic:
     get:
-      description: Получение списка всех интересов
+      description: 'Getting a list of all topics'
       security:
         - BearerAuth: [ ]
       responses:
