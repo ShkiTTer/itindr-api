@@ -30,25 +30,14 @@ class ProfileServiceImpl(
         userDataSource.getUserById(params.userId)
             ?: throw NotFoundException("User with id - '${params.userId}' not found")
 
-        val savedFilePath = params.avatar?.let {
-            filesDataSource.saveFile(
-                fileName = createAvatarFileName(params.userId),
-                extension = params.fileExtension,
-                bytes = it
-            )
-        }
-
         val dataSourceParams = CreateProfileDataSourceParams(
             name = params.name,
             aboutMyself = params.aboutMyself,
             userId = params.userId,
-            topicIds = params.topicIds,
-            avatar = savedFilePath
+            topicIds = params.topicIds
         )
 
-        return profileDataSource.createProfile(dataSourceParams).let { profile ->
-            profileDataSource.updateAvatar(profileId = profile.id, avatar = savedFilePath)
-        }
+        return profileDataSource.createProfile(dataSourceParams)
     }
 
     private fun createAvatarFileName(userId: UUID) = userId.toString()
