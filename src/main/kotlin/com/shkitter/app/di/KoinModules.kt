@@ -46,7 +46,14 @@ object KoinModules {
     }
 
     private val serviceModule = module {
-        factory<AuthService> { AuthServiceImpl(tokenDataSource = get(), userDataSource = get(), jwt = get()) }
+        factory<AuthService> {
+            AuthServiceImpl(
+                tokenDataSource = get(),
+                userDataSource = get(),
+                profileDataSource = get(),
+                jwt = get()
+            )
+        }
         factory<ProfileService> {
             ProfileServiceImpl(
                 profileDataSource = get(),

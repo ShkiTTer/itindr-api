@@ -9,11 +9,11 @@ import kotlinx.serialization.Serializable
 import java.util.*
 
 @Serializable
-data class CreateProfileRequestDto(
+data class UpdateProfileRequestDto(
     val name: String? = null,
     val aboutMyself: String? = null,
     val topics: List<String> = emptyList()
-) : Request<CreateProfileRequest>() {
+) : Request<UpdateProfileRequest>() {
 
     override fun validateOrThrowError() {
         UserNameValidationRule.validate(name).throwBadRequestIfError()
@@ -21,7 +21,7 @@ data class CreateProfileRequestDto(
         TopicIdsValidationRule.validate(topics).throwBadRequestIfError()
     }
 
-    override fun toVerified(): CreateProfileRequest = CreateProfileRequest(
+    override fun toVerified(): UpdateProfileRequest = UpdateProfileRequest(
         name = name.orEmpty(),
         aboutMyself = aboutMyself,
         topicIds = topics.map { UUID.fromString(it) }

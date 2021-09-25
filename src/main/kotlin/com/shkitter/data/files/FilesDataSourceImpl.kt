@@ -14,10 +14,26 @@ class FilesDataSourceImpl(
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
-    override suspend fun saveFile(fileName: String, extension: String, bytes: ByteArray): String =
-        withContext(coroutineContext) {
-            val file = File("$storePath/$fileName.$extension")
-            file.writeBytes(bytes)
-            file.path
+    init {
+        createDirectoryIfNotExist()
+    }
+
+    override suspend fun saveFile(
+        fileName: String,
+        extension: String,
+        bytes: ByteArray,
+        deleteOnExit: Boolean
+    ): String = withContext(coroutineContext) {
+        val file = File("$storePath/$fileName.$extension").also {
+            if (deleteOnExit) it.deleteOnExit()
         }
+        file.writeBytes(bytes)
+        file.path
+    }
+
+    private fun createDirectoryIfNotExist() {
+        val dir = File(storePath)
+        if (dir.exists() && dir.isDirectory) return
+        dir.mkdir()
+    }
 }

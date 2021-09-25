@@ -6,8 +6,8 @@ import com.shkitter.data.db.profile.model.ProfileTable
 import com.shkitter.data.db.topic.TopicEntity
 import com.shkitter.data.db.user.UserEntity
 import com.shkitter.domain.profile.ProfileDataSource
-import com.shkitter.domain.profile.model.CreateProfileDataSourceParams
 import com.shkitter.domain.profile.model.ProfileWithTopics
+import com.shkitter.domain.profile.model.UpdateProfileDataSourceParams
 import org.jetbrains.exposed.sql.Database
 import java.util.*
 
@@ -23,22 +23,19 @@ class ProfileDataSourceImpl(
         ProfileEntity.find { ProfileTable.userId eq userId }.firstOrNull()?.id?.value
     }
 
-    override suspend fun createProfile(params: CreateProfileDataSourceParams): ProfileWithTopics = db.dbQuery {
+    override suspend fun createEmptyProfile(userId: UUID) = db.dbQuery {
         ProfileEntity.new {
-            userName = params.name
-            aboutMyself = params.aboutMyself
-            userId = UserEntity[params.userId].id
-            topics = TopicEntity.forIds(params.topicIds)
-        }.toDomainWithTopics()
+            userName = ""
+            this.userId = UserEntity[userId].id
+        }
+        Unit
     }
 
-    override suspend fun updateAvatar(profileId: UUID, avatar: String?): ProfileWithTopics = db.dbQuery {
-        ProfileEntity[profileId].apply {
-            this.avatar = avatar
-        }.toDomainWithTopics()
+    override suspend fun updateAvatar(profileId: UUID, avatar: String?) = db.dbQuery {
+        ProfileEntity[profileId].avatar = avatar
     }
 
-    override suspend fun updateProfile(profileId: UUID, params: CreateProfileDataSourceParams): ProfileWithTopics =
+    override suspend fun updateProfile(profileId: UUID, params: UpdateProfileDataSourceParams): ProfileWithTopics =
         db.dbQuery {
             ProfileEntity[profileId].apply {
                 userName = params.name

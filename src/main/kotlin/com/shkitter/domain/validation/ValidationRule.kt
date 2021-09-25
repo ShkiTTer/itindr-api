@@ -1,6 +1,6 @@
 package com.shkitter.domain.validation
 
-import com.shkitter.app.common.extensions.toUUID
+import com.shkitter.domain.common.extensions.toUUID
 
 sealed class ValidationRule<in T> {
     abstract fun validate(value: T): ValidationResult

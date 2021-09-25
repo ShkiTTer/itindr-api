@@ -5,6 +5,7 @@ import com.shkitter.domain.common.exceptions.NotFoundException
 import com.shkitter.domain.common.exceptions.ResourceAlreadyExistException
 import com.shkitter.domain.common.jwt.Jwt
 import com.shkitter.domain.common.utils.HashUtil
+import com.shkitter.domain.profile.ProfileDataSource
 import com.shkitter.domain.token.TokenDataSource
 import com.shkitter.domain.token.TokenInfo
 import com.shkitter.domain.user.UserDataSource
@@ -13,6 +14,7 @@ import java.util.*
 class AuthServiceImpl(
     private val tokenDataSource: TokenDataSource,
     private val userDataSource: UserDataSource,
+    private val profileDataSource: ProfileDataSource,
     private val jwt: Jwt
 ) : AuthService {
 
@@ -39,6 +41,8 @@ class AuthServiceImpl(
 
         val tokenInfo = jwt.newToken(userId = newUser.id.toString())
         tokenDataSource.saveTokenInfo(userId = newUser.id, tokenInfo = tokenInfo)
+
+        profileDataSource.createEmptyProfile(userId = newUser.id)
 
         return tokenInfo
     }
