@@ -12,18 +12,18 @@ import java.util.*
 data class CreateProfileRequestDto(
     val name: String? = null,
     val aboutMyself: String? = null,
-    val topicIds: List<String> = emptyList()
+    val topics: List<String> = emptyList()
 ) : Request<CreateProfileRequest>() {
 
     override fun validateOrThrowError() {
         UserNameValidationRule.validate(name).throwBadRequestIfError()
         AboutMyselfValidationRule.validate(aboutMyself).throwBadRequestIfError()
-        TopicIdsValidationRule.validate(topicIds).throwBadRequestIfError()
+        TopicIdsValidationRule.validate(topics).throwBadRequestIfError()
     }
 
     override fun toVerified(): CreateProfileRequest = CreateProfileRequest(
         name = name.orEmpty(),
         aboutMyself = aboutMyself,
-        topicIds = topicIds.map { UUID.fromString(it) }
+        topicIds = topics.map { UUID.fromString(it) }
     )
 }
