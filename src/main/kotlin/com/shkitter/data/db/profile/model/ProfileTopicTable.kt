@@ -8,5 +8,5 @@ object ProfileTopicTable : Table(name = "profile_topic") {
     val profileId = reference(name = "profile_id", foreign = ProfileTable, onDelete = ReferenceOption.CASCADE)
     val topicId = reference(name = "topic_id", foreign = TopicTable, onDelete = ReferenceOption.CASCADE)
 
-    override val primaryKey: PrimaryKey = PrimaryKey(profileId, topicId)
+    override val primaryKey: PrimaryKey = PrimaryKey(profileId, topicId, name = "pk_profile_topic")
 }

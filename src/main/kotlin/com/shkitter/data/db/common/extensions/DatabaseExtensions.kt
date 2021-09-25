@@ -6,5 +6,5 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 interface DatabaseDataSource {
     suspend fun <T> Database.dbQuery(block: suspend () -> T): T =
-        newSuspendedTransaction(Dispatchers.IO, this) { block.invoke() }
+        newSuspendedTransaction(Dispatchers.IO, db = this) { block.invoke() }
 }

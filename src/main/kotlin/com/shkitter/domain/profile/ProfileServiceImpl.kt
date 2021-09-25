@@ -23,7 +23,7 @@ class ProfileServiceImpl(
     }
 
     override suspend fun createProfile(params: CreateProfileServiceParams): ProfileWithTopics {
-        if (!topicDataSource.checkTopicsExist(params.topicIds)) {
+        if (params.topicIds.isNotEmpty() && !topicDataSource.checkTopicsExist(params.topicIds)) {
             throw NotFoundException("Some topics not found")
         }
 

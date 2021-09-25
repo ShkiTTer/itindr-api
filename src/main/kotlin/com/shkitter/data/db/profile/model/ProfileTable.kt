@@ -13,8 +13,8 @@ import java.util.*
 
 object ProfileTable : UUIDTable(name = "profile") {
     val userName = varchar(name = "user_name", length = 100)
-    val aboutMyself = varchar(name = "about_myself", length = 250).nullable()
-    val avatar = varchar(name = "avatar", length = 255).nullable()
+    val aboutMyself = varchar(name = "about_myself", length = 250).nullable().default(null)
+    val avatar = varchar(name = "avatar", length = 255).nullable().default(null)
 
     val userId = reference(name = "user_id", foreign = UserTable, onDelete = ReferenceOption.CASCADE)
 }
