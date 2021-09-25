@@ -14,10 +14,10 @@ data class ProfileWithTopicsResponse(
 ) {
 
     companion object {
-        fun fromDomain(data: ProfileWithTopics, baseUrl: String) = ProfileWithTopicsResponse(
+        fun fromDomain(data: ProfileWithTopics, scheme: String) = ProfileWithTopicsResponse(
             name = data.name,
             aboutMyself = data.aboutMyself,
-            avatar = data.avatar?.createAvatarUrl(baseUrl),
+            avatar = data.avatar?.createAvatarUrl(scheme),
             topics = data.topics.map { TopicResponse.fromDomain(it) }
         )
     }

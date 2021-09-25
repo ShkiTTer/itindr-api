@@ -28,7 +28,7 @@ class FilesDataSourceImpl(
             if (deleteOnExit) it.deleteOnExit()
         }
         file.writeBytes(bytes)
-        file.path
+        "$fileName.$extension"
     }
 
     private fun createDirectoryIfNotExist() {

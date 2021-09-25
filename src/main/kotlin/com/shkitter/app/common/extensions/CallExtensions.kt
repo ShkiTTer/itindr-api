@@ -29,4 +29,4 @@ fun ApplicationCall.principalUserIdOrThrow(): UUID {
     return userId.toUUID() ?: throw AuthenticationException("You are not authorized")
 }
 
-val ApplicationCall.baseUrl: String get() = "${request.local.scheme}://${request.local.host}"
+val ApplicationCall.scheme: String get() = request.local.scheme

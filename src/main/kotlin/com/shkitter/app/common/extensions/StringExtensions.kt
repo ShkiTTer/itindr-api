@@ -1,3 +1,6 @@
 package com.shkitter.app.common.extensions
 
-fun String.createAvatarUrl(baseUrl: String) = "$baseUrl$this"
+import com.shkitter.domain.common.utils.SystemEnvVariablesUtil
+
+fun String.createAvatarUrl(scheme: String) =
+    "$scheme://${SystemEnvVariablesUtil.host}${com.shkitter.domain.common.utils.SystemEnvVariablesUtil.accessFileUrlPath}$this"

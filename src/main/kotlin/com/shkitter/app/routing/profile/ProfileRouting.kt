@@ -26,7 +26,7 @@ fun Routing.configureProfile() {
             get {
                 val userId = call.principalUserIdOrThrow()
                 val fullProfile = profileService.getFullProfileByUserId(userId = userId)
-                call.respondSuccess(ProfileWithTopicsResponse.fromDomain(data = fullProfile, baseUrl = call.baseUrl))
+                call.respondSuccess(ProfileWithTopicsResponse.fromDomain(data = fullProfile, scheme = call.scheme))
             }
 
             patch {
@@ -39,7 +39,7 @@ fun Routing.configureProfile() {
                             userId = userId
                         )
                     )
-                call.respondSuccess(ProfileWithTopicsResponse.fromDomain(data = updatedProfile, baseUrl = call.baseUrl))
+                call.respondSuccess(ProfileWithTopicsResponse.fromDomain(data = updatedProfile, scheme = call.scheme))
             }
         }
 
