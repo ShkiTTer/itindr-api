@@ -19,6 +19,10 @@ class ProfileDataSourceImpl(
         ProfileEntity.find { ProfileTable.userId eq userId }.firstOrNull()?.toDomainWithTopics()
     }
 
+    override suspend fun getProfileIdByUserId(userId: UUID): UUID? = db.dbQuery {
+        ProfileEntity.find { ProfileTable.userId eq userId }.firstOrNull()?.id?.value
+    }
+
     override suspend fun createProfile(params: CreateProfileDataSourceParams): ProfileWithTopics = db.dbQuery {
         ProfileEntity.new {
             userName = params.name
@@ -33,4 +37,14 @@ class ProfileDataSourceImpl(
             this.avatar = avatar
         }.toDomainWithTopics()
     }
+
+    override suspend fun updateProfile(profileId: UUID, params: CreateProfileDataSourceParams): ProfileWithTopics =
+        db.dbQuery {
+            ProfileEntity[profileId].apply {
+                userName = params.name
+                aboutMyself = params.aboutMyself
+                userId = UserEntity[params.userId].id
+                topics = TopicEntity.forIds(params.topicIds)
+            }.toDomainWithTopics()
+        }
 }

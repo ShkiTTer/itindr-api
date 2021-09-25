@@ -30,15 +30,29 @@ class ProfileServiceImpl(
         userDataSource.getUserById(params.userId)
             ?: throw NotFoundException("User with id - '${params.userId}' not found")
 
-        val dataSourceParams = CreateProfileDataSourceParams(
-            name = params.name,
-            aboutMyself = params.aboutMyself,
-            userId = params.userId,
-            topicIds = params.topicIds
-        )
+        return profileDataSource.createProfile(getCreateDataSourceParams(params))
+    }
 
-        return profileDataSource.createProfile(dataSourceParams)
+    override suspend fun updateProfile(params: CreateProfileServiceParams): ProfileWithTopics {
+        if (params.topicIds.isNotEmpty() && !topicDataSource.checkTopicsExist(params.topicIds)) {
+            throw NotFoundException("Some topics not found")
+        }
+
+        userDataSource.getUserById(params.userId)
+            ?: throw NotFoundException("User with id - '${params.userId}' not found")
+
+        val profileId =
+            profileDataSource.getProfileIdByUserId(params.userId) ?: throw NotFoundException("Profile not found")
+
+        return profileDataSource.updateProfile(profileId = profileId, params = getCreateDataSourceParams(params))
     }
 
     private fun createAvatarFileName(userId: UUID) = userId.toString()
+
+    private fun getCreateDataSourceParams(params: CreateProfileServiceParams) = CreateProfileDataSourceParams(
+        name = params.name,
+        aboutMyself = params.aboutMyself,
+        userId = params.userId,
+        topicIds = params.topicIds
+    )
 }

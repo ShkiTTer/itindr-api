@@ -7,4 +7,5 @@ import java.util.*
 interface ProfileService {
     suspend fun getFullProfileByUserId(userId: UUID): ProfileWithTopics
     suspend fun createProfile(params: CreateProfileServiceParams): ProfileWithTopics
+    suspend fun updateProfile(params: CreateProfileServiceParams): ProfileWithTopics
 }
