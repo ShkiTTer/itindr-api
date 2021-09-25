@@ -14,6 +14,8 @@ tags:
     description: 'Авторизация/регистрация'
   - name: Profile
     description: Профиль пользователя
+  - name: Topic
+    description: Интересы
 
 paths:
   /v1/auth/login:
@@ -195,6 +197,27 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       tags:
         - Profile
+
+  /v1/topic:
+    get:
+      description: Получение списка всех интересов
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          $ref: '#/components/responses/TopicInfoList'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - Topic
 
 components:
   securitySchemes:
@@ -403,3 +426,17 @@ components:
             example:
               id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
               title: 'Kotlin'
+
+    TopicInfoList:
+      description: 'List of all topics'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/responses/TopicInfo'
+            example:
+              - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                title: 'Kotlin'
+              - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                title: 'Ktor'
