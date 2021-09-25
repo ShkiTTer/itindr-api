@@ -11,4 +11,6 @@ interface ProfileDataSource {
     suspend fun createEmptyProfile(userId: UUID)
     suspend fun updateAvatar(profileId: UUID, avatar: String?)
     suspend fun updateProfile(profileId: UUID, params: UpdateProfileDataSourceParams): ProfileWithTopics
+
+    suspend fun getUserFeed(userId: UUID): List<ProfileWithTopics>
 }

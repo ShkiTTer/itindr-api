@@ -1,6 +1,8 @@
 package com.shkitter.data.db.profile
 
 import com.shkitter.data.db.common.extensions.DatabaseDataSource
+import com.shkitter.data.db.likes.LikeEntity
+import com.shkitter.data.db.likes.LikesTable
 import com.shkitter.data.db.profile.model.ProfileEntity
 import com.shkitter.data.db.profile.model.ProfileTable
 import com.shkitter.data.db.topic.TopicEntity
@@ -9,6 +11,7 @@ import com.shkitter.domain.profile.ProfileDataSource
 import com.shkitter.domain.profile.model.ProfileWithTopics
 import com.shkitter.domain.profile.model.UpdateProfileDataSourceParams
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.or
 import java.util.*
 
 class ProfileDataSourceImpl(
@@ -44,4 +47,19 @@ class ProfileDataSourceImpl(
                 topics = TopicEntity.forIds(params.topicIds)
             }.toDomainWithTopics()
         }
+
+    override suspend fun getUserFeed(userId: UUID): List<ProfileWithTopics> = db.dbQuery {
+        val notContactUsers = LikeEntity
+            .find { (LikesTable.from neq userId) or (LikesTable.to neq userId) }
+            .map {
+                ProfileEntity.find { ProfileTable.userId eq if (it.from.value != userId) it.from else it.to }.first()
+            }
+
+        val currentTopics = ProfileEntity[userId].topics
+
+        notContactUsers
+            .map { profile -> profile to profile.topics.intersect(currentTopics).size }
+            .sortedByDescending { it.second }
+            .map { it.first.toDomainWithTopics() }
+    }
 }

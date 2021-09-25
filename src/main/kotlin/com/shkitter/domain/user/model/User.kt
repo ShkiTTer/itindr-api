@@ -1,4 +1,4 @@
-package com.shkitter.domain.user
+package com.shkitter.domain.user.model
 
 import java.util.*
 
