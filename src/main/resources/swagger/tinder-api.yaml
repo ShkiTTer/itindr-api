@@ -20,6 +20,7 @@ paths:
     description: Авторизация
     post:
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -35,6 +36,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         404:
           $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
       tags:
         - Auth
 
@@ -42,6 +45,7 @@ paths:
     description: Регистрация
     post:
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -57,6 +61,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         409:
           $ref: '#/components/responses/Conflict'
+        500:
+          $ref: '#/components/responses/InternalServerError'
       tags:
         - Auth
 
@@ -72,6 +78,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         404:
           $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
       tags:
         - Auth
 
@@ -81,6 +89,7 @@ paths:
       security:
         - BearerAuth: [ ]
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -98,6 +107,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         404:
           $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
       tags:
         - Auth
 
@@ -117,18 +128,21 @@ paths:
           $ref: '#/components/responses/Forbidden'
         404:
           $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
       tags:
         - Profile
 
-    post:
+    patch:
       description: Создание профиля пользователя
       security:
         - BearerAuth: [ ]
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateProfileBody'
+              $ref: '#/components/schemas/UpdateProfileBody'
             example:
               name: 'Иван'
               aboutMyself: null
@@ -144,6 +158,41 @@ paths:
           $ref: '#/components/responses/Forbidden'
         404:
           $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - Profile
+
+  /v1/profile/avatar:
+    post:
+      description: 'Загрузка аватара пользователя'
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+              required:
+                - avatar
+      responses:
+        204:
+          description: 'Аватар успешно загружен'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
       tags:
         - Profile
 
@@ -189,7 +238,7 @@ components:
       required:
         - refreshToken
 
-    CreateProfileBody:
+    UpdateProfileBody:
       type: object
       properties:
         name:
@@ -264,6 +313,18 @@ components:
                 type: string
           example:
             message: 'Resource already exist'
+
+    InternalServerError:
+      description: 'Internal Server Error'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: 'Something went wrong'
 
     TokenInfo:
       description: 'Token information'

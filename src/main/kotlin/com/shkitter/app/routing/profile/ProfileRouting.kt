@@ -1,9 +1,6 @@
 package com.shkitter.app.routing.profile
 
-import com.shkitter.app.common.extensions.principalUserIdOrThrow
-import com.shkitter.app.common.extensions.receiveOrThrow
-import com.shkitter.app.common.extensions.respondSuccess
-import com.shkitter.app.common.extensions.respondSuccessEmpty
+import com.shkitter.app.common.extensions.*
 import com.shkitter.app.routing.profile.model.ProfileWithTopicsResponse
 import com.shkitter.app.routing.profile.model.UpdateProfileRequest
 import com.shkitter.app.routing.profile.model.UpdateProfileRequestDto
@@ -29,7 +26,7 @@ fun Routing.configureProfile() {
             get {
                 val userId = call.principalUserIdOrThrow()
                 val fullProfile = profileService.getFullProfileByUserId(userId = userId)
-                call.respondSuccess(ProfileWithTopicsResponse.fromDomain(fullProfile))
+                call.respondSuccess(ProfileWithTopicsResponse.fromDomain(data = fullProfile, baseUrl = call.baseUrl))
             }
 
             patch {
@@ -42,7 +39,7 @@ fun Routing.configureProfile() {
                             userId = userId
                         )
                     )
-                call.respondSuccess(ProfileWithTopicsResponse.fromDomain(updatedProfile))
+                call.respondSuccess(ProfileWithTopicsResponse.fromDomain(data = updatedProfile, baseUrl = call.baseUrl))
             }
         }
 

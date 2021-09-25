@@ -3,6 +3,7 @@ package com.shkitter.app.common.extensions
 import com.shkitter.app.common.responses.Response
 import com.shkitter.domain.common.exceptions.AuthenticationException
 import com.shkitter.domain.common.exceptions.BadRequestException
+import com.shkitter.domain.common.extensions.toUUID
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -25,10 +26,7 @@ suspend inline fun <reified T : Any> ApplicationCall.receiveOrThrow(): T =
 fun ApplicationCall.principalUserIdOrThrow(): UUID {
     val userId = this.principal<UserIdPrincipal>()?.name
     if (userId.isNullOrBlank()) throw AuthenticationException("You are not authorized")
-
-    return try {
-        UUID.fromString(userId)
-    } catch (e: Exception) {
-        throw AuthenticationException("You are not authorized")
-    }
+    return userId.toUUID() ?: throw AuthenticationException("You are not authorized")
 }
+
+val ApplicationCall.baseUrl: String get() = "${request.local.scheme}://${request.local.host}"
