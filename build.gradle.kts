@@ -65,11 +65,6 @@ dependencies {
     // Hikari
     implementation("com.zaxxer:HikariCP:$hikariVersion")
 
-    implementation("org.apache.commons:commons-email:1.5")
-
-    // Flyway
-    implementation("com.viartemev:ktor-flyway-feature:1.3.0")
-
     // Tests
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
