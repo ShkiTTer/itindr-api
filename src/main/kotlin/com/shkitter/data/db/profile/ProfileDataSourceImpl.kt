@@ -11,6 +11,7 @@ import com.shkitter.domain.profile.ProfileDataSource
 import com.shkitter.domain.profile.model.ProfileWithTopics
 import com.shkitter.domain.profile.model.UpdateProfileDataSourceParams
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
 import java.util.*
 
@@ -49,16 +50,21 @@ class ProfileDataSourceImpl(
         }
 
     override suspend fun getUserFeed(userId: UUID): List<ProfileWithTopics> = db.dbQuery {
-        val notContactUsers = LikeEntity
-            .find { (LikesTable.from neq userId) or (LikesTable.to neq userId) }
-            .map {
-                ProfileEntity.find { ProfileTable.userId eq if (it.from.value != userId) it.from else it.to }.first()
+        val currentUserProfile = ProfileEntity.find { ProfileTable.userId eq userId }.first()
+        val contactUsers = LikeEntity
+            .find {
+                ((LikesTable.from eq userId) and (LikesTable.to eq currentUserProfile.userId)) or
+                    ((LikesTable.from eq currentUserProfile.userId) and (LikesTable.to eq userId))
             }
+            .map { if (it.from.value != userId) it.from else it.to }
+            .distinct()
 
-        val currentTopics = ProfileEntity[userId].topics
+        val notContactUsers = ProfileEntity.find {
+            (ProfileTable.userId neq userId) and (ProfileTable.userId notInList contactUsers)
+        }
 
         notContactUsers
-            .map { profile -> profile to profile.topics.intersect(currentTopics).size }
+            .map { profile -> profile to profile.topics.intersect(currentUserProfile.topics).size }
             .sortedByDescending { it.second }
             .map { it.first.toDomainWithTopics() }
     }

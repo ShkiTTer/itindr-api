@@ -48,7 +48,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     // Swagger UI
-    implementation("com.github.papsign:Ktor-OpenAPI-Generator:-SNAPSHOT")
+    implementation("com.github.papsign:Ktor-OpenAPI-Generator:0.2-beta.20")
 
     // Koin
     implementation("io.insert-koin:koin-ktor:$koinVersion")

@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProfileWithTopicsResponse(
+    val userId: String,
     val name: String,
     val aboutMyself: String?,
     val avatar: String?,
@@ -15,6 +16,7 @@ data class ProfileWithTopicsResponse(
 
     companion object {
         fun fromDomain(data: ProfileWithTopics, scheme: String) = ProfileWithTopicsResponse(
+            userId = data.userId.toString(),
             name = data.name,
             aboutMyself = data.aboutMyself,
             avatar = data.avatar?.createAvatarUrl(scheme),

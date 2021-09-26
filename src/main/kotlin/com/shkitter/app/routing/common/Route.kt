@@ -1,10 +1,10 @@
 package com.shkitter.app.routing.common
 
-interface Route {
-    private companion object {
-        const val URL_SEPARATOR = "/"
-    }
+private const val URL_SEPARATOR = "/"
+private const val OPEN_CURLY_BRACE = "{"
+private const val CLOSE_CURLY_BRACE = "}"
 
+interface Route {
     val parent: Route?
     val name: String
 
@@ -32,5 +32,17 @@ interface Route {
     object Docs : Route {
         override val name: String = "docs"
         override val parent: Route = Mobile
+    }
+}
+
+interface RouteWithPathParam : Route {
+    val paramName: String
+
+    override fun getPath(): String = buildString {
+        append(super.getPath())
+        append(URL_SEPARATOR)
+        append(OPEN_CURLY_BRACE)
+        append(paramName)
+        append(CLOSE_CURLY_BRACE)
     }
 }

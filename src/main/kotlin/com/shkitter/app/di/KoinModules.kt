@@ -19,6 +19,8 @@ import com.shkitter.domain.topic.TopicDataSource
 import com.shkitter.domain.topic.TopicService
 import com.shkitter.domain.topic.TopicServiceImpl
 import com.shkitter.domain.user.UserDataSource
+import com.shkitter.domain.user.UserService
+import com.shkitter.domain.user.UserServiceImpl
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
@@ -67,6 +69,8 @@ object KoinModules {
         }
 
         factory<TopicService> { TopicServiceImpl(topicDataSource = get()) }
+
+        factory<UserService> { UserServiceImpl(userDataSource = get(), profileDataSource = get()) }
     }
 
     private val jwtModule = module {

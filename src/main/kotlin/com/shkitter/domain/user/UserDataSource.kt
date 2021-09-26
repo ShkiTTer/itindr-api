@@ -10,4 +10,5 @@ interface UserDataSource {
 
     suspend fun likeUser(from: UUID, to: UUID): Boolean
     suspend fun dislikeUser(from: UUID, to: UUID)
+    suspend fun hasReaction(from: UUID, to: UUID): Boolean
 }

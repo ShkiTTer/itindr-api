@@ -23,6 +23,12 @@ suspend fun ApplicationCall.respondSuccessEmpty() =
 suspend inline fun <reified T : Any> ApplicationCall.receiveOrThrow(): T =
     this.receiveOrNull() ?: throw BadRequestException("Request body is required")
 
+inline fun <reified T> ApplicationCall.getPathParameter(name: String): T =
+    this.parameters[name] as? T ?: throw BadRequestException("Path parameter '$name' is required")
+
+inline fun <reified T> ApplicationCall.getPathParameterOrNull(name: String): T? =
+    this.parameters[name] as? T
+
 fun ApplicationCall.principalUserIdOrThrow(): UUID {
     val userId = this.principal<UserIdPrincipal>()?.name
     if (userId.isNullOrBlank()) throw AuthenticationException("You are not authorized")

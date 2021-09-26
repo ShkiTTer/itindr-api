@@ -48,4 +48,10 @@ class UserDataSourceImpl(private val db: Database) : UserDataSource, DatabaseDat
         }
         Unit
     }
+
+    override suspend fun hasReaction(from: UUID, to: UUID): Boolean = db.dbQuery {
+        LikeEntity.find {
+            (LikesTable.from eq from) and (LikesTable.to eq to)
+        }.firstOrNull() != null
+    }
 }

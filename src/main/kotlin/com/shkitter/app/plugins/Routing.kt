@@ -5,6 +5,7 @@ import com.shkitter.app.routing.auth.configureAuthRouting
 import com.shkitter.app.routing.common.Route
 import com.shkitter.app.routing.profile.configureProfile
 import com.shkitter.app.routing.topic.configureTopic
+import com.shkitter.app.routing.user.configureUserRouting
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -25,5 +26,6 @@ fun Application.configureRouting() {
         configureAuthRouting()
         configureProfile()
         configureTopic()
+        configureUserRouting()
     }
 }
