@@ -2,6 +2,7 @@ package com.shkitter.app.routing.user
 
 import com.shkitter.app.common.extensions.*
 import com.shkitter.app.routing.profile.model.ProfileWithTopicsResponse
+import com.shkitter.app.routing.user.model.GetAllUsersRequestDto
 import com.shkitter.app.routing.user.model.LikeResponse
 import com.shkitter.domain.common.exceptions.BadRequestException
 import com.shkitter.domain.common.extensions.toUUID
@@ -36,6 +37,12 @@ fun Routing.configureUserRouting() {
             val userId = call.principalUserIdOrThrow()
             val usersFeed = userService.getUsersFeed(userId = userId)
             call.respondSuccess(usersFeed.map { ProfileWithTopicsResponse.fromDomain(data = it, scheme = call.scheme) })
+        }
+
+        get(UserV1.getPath()) {
+            val request = call.receiveOrThrow<GetAllUsersRequestDto>().validateAndConvertToVerified()
+            val users = userService.getAllUsers(limit = request.limit, offset = request.offset)
+            call.respondSuccess(users.map { ProfileWithTopicsResponse.fromDomain(data = it, scheme = call.scheme) })
         }
     }
 }

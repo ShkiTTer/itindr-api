@@ -39,4 +39,6 @@ class UserServiceImpl(
             throw ResourceAlreadyExistException("There is already a reaction from the user with id - $from for the user with id - $to")
         }
     }
+
+    override suspend fun getAllUsers(limit: Int, offset: Int) = profileDataSource.getAll(limit, offset)
 }

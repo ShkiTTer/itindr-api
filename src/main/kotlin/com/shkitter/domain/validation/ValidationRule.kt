@@ -70,3 +70,19 @@ object TopicIdsValidationRule : ValidationRule<List<String>>() {
         else -> ValidationResult.Valid
     }
 }
+
+object LimitValidationRule : ValidationRule<Int?>() {
+    override fun validate(value: Int?): ValidationResult = when {
+        value == null -> ValidationResult.Error("Limit is required")
+        value <= 0 -> ValidationResult.Error("Limit must be greater than 0")
+        else -> ValidationResult.Valid
+    }
+}
+
+object OffsetValidationRule : ValidationRule<Int?>() {
+    override fun validate(value: Int?): ValidationResult = when {
+        value == null -> ValidationResult.Error("Offset is required")
+        value <= 0 -> ValidationResult.Error("Offset must be greater than 0")
+        else -> ValidationResult.Valid
+    }
+}

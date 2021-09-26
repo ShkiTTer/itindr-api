@@ -17,7 +17,7 @@ tags:
 
 paths:
   /v1/auth/login:
-    description: 'Authorization'
+    summary: 'Authorization'
     post:
       requestBody:
         required: true
@@ -42,7 +42,7 @@ paths:
         - Auth
 
   /v1/auth/register:
-    description: 'Registration'
+    summary: 'Registration'
     post:
       requestBody:
         required: true
@@ -67,7 +67,7 @@ paths:
         - Auth
 
   /v1/auth/logout:
-    description: 'Sign out of your account'
+    summary: 'Sign out of your account'
     post:
       security:
         - BearerAuth: [ ]
@@ -84,7 +84,7 @@ paths:
         - Auth
 
   /v1/auth/refresh:
-    description: 'Refreshing Access token with Refresh token'
+    summary: 'Refreshing Access token with Refresh token'
     post:
       security:
         - BearerAuth: [ ]
@@ -114,7 +114,7 @@ paths:
 
   /v1/profile:
     get:
-      description: 'Retrieving User Profile Information'
+      summary: 'Retrieving User Profile Information'
       security:
         - BearerAuth: [ ]
       responses:
@@ -134,7 +134,7 @@ paths:
         - Profile
 
     patch:
-      description: 'Updating user profile'
+      summary: 'Updating user profile'
       security:
         - BearerAuth: [ ]
       requestBody:
@@ -165,7 +165,7 @@ paths:
 
   /v1/profile/avatar:
     post:
-      description: 'Uploading user avatar'
+      summary: 'Uploading user avatar'
       security:
         - BearerAuth: [ ]
       requestBody:
@@ -198,7 +198,7 @@ paths:
 
   /v1/topic:
     get:
-      description: 'Getting a list of all topics'
+      summary: 'Getting a list of all topics'
       security:
         - BearerAuth: [ ]
       responses:
@@ -217,9 +217,30 @@ paths:
       tags:
         - Topic
 
+  /v1/user:
+    get:
+      summary: 'Getting a list of all users'
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          $ref: '#/components/responses/ProfileWithTopicList'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - User
+
   /v1/user/feed:
     get:
-      description: 'Getting a list of users who may be of interest to you'
+      summary: 'Getting a list of users who may be of interest to you'
       security:
         - BearerAuth: [ ]
       responses:
@@ -239,7 +260,7 @@ paths:
         - User
 
   /v1/user/{userId}/like:
-    description: 'Set like for user'
+    summary: 'Set like for user'
     post:
       security:
         - BearerAuth: [ ]
@@ -262,7 +283,7 @@ paths:
         - User
 
   /v1/user/{userId}/dislike:
-    description: 'Set dislike for user'
+    summary: 'Set dislike for user'
     post:
       security:
         - BearerAuth: [ ]
