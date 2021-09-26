@@ -13,6 +13,7 @@ tags:
   - name: Auth
   - name: Profile
   - name: Topic
+  - name: User
 
 paths:
   /v1/auth/login:
@@ -216,6 +217,73 @@ paths:
       tags:
         - Topic
 
+  /v1/user/feed:
+    get:
+      description: 'Getting a list of users who may be of interest to you'
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          $ref: '#/components/responses/ProfileWithTopicList'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - User
+
+  /v1/user/{userId}/like:
+    description: 'Set like for user'
+    post:
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          $ref: '#/components/responses/LikeResult'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        409:
+          $ref: '#/components/responses/Conflict'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - User
+
+  /v1/user/{userId}/dislike:
+    description: 'Set dislike for user'
+    post:
+      security:
+        - BearerAuth: [ ]
+      responses:
+        204:
+          description: 'Dislike successfully posted'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        409:
+          $ref: '#/components/responses/Conflict'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - User
+
 components:
   securitySchemes:
     BearerAuth:
@@ -381,6 +449,9 @@ components:
           schema:
             type: object
             properties:
+              userId:
+                type: string
+                format: uuid
               name:
                 type: string
               aboutMyself:
@@ -396,6 +467,7 @@ components:
               - name
               - topics
             example:
+              userId: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
               name: 'Иван'
               aboutMyself: null
               avatar: null
@@ -404,6 +476,34 @@ components:
                   title: 'Kotlin'
                 - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
                   title: 'Ktor'
+
+    ProfileWithTopicList:
+      description: 'User profile list'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/responses/ProfileWithTopics'
+            example:
+              - userId: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                name: 'Иван'
+                aboutMyself: null
+                avatar: null
+                topics:
+                  - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                    title: 'Kotlin'
+                  - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                    title: 'Ktor'
+              - userId: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                name: 'Иван'
+                aboutMyself: null
+                avatar: null
+                topics:
+                  - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                    title: 'Kotlin'
+                  - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                    title: 'Ktor'
 
     TopicInfo:
       description: 'Info about topic'
@@ -425,7 +525,7 @@ components:
               title: 'Kotlin'
 
     TopicInfoList:
-      description: 'List of all topics'
+      description: 'List of topics'
       content:
         application/json:
           schema:
@@ -437,3 +537,14 @@ components:
                 title: 'Kotlin'
               - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
                 title: 'Ktor'
+
+    LikeResult:
+      description: 'Result of like user'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isMutual:
+                type: boolean
+                example: true
