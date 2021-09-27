@@ -76,7 +76,13 @@ object KoinModules {
         }
         factory<TopicService> { TopicServiceImpl(topicDataSource = get()) }
         factory<UserService> { UserServiceImpl(userDataSource = get(), profileDataSource = get()) }
-        factory<ChatService> { ChatServiceImpl(chatDataSource = get(), userDataSource = get()) }
+        factory<ChatService> {
+            ChatServiceImpl(
+                chatDataSource = get(),
+                userDataSource = get(),
+                messageDataSource = get()
+            )
+        }
     }
 
     private val jwtModule = module {

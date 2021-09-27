@@ -1,5 +1,6 @@
 package com.shkitter.app.routing.chat.model
 
+import com.shkitter.app.common.extensions.createFileUrl
 import com.shkitter.domain.chat.model.Chat
 import kotlinx.serialization.Serializable
 import java.util.*
@@ -20,9 +21,9 @@ data class ChatResponse(
                 data.secondUser.name
             },
             avatar = if (data.firstUser.id != currentUserId) {
-                data.firstUser.avatar
+                data.firstUser.avatar?.createFileUrl(scheme = scheme)
             } else {
-                data.secondUser.avatar
+                data.secondUser.avatar?.createFileUrl(scheme = scheme)
             }
         )
     }
