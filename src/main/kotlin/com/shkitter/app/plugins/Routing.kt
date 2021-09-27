@@ -2,6 +2,7 @@ package com.shkitter.app.plugins
 
 import com.shkitter.app.common.extensions.getConfigProperty
 import com.shkitter.app.routing.auth.configureAuthRouting
+import com.shkitter.app.routing.chat.configureChat
 import com.shkitter.app.routing.common.Route
 import com.shkitter.app.routing.profile.configureProfile
 import com.shkitter.app.routing.topic.configureTopic
@@ -27,5 +28,6 @@ fun Application.configureRouting() {
         configureProfile()
         configureTopic()
         configureUserRouting()
+        configureChat()
     }
 }

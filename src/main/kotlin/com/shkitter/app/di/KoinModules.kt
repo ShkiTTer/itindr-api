@@ -1,6 +1,8 @@
 package com.shkitter.app.di
 
 import com.shkitter.data.db.Database
+import com.shkitter.data.db.chat.ChatDataSourceImpl
+import com.shkitter.data.db.message.MessageDataSourceImpl
 import com.shkitter.data.db.profile.ProfileDataSourceImpl
 import com.shkitter.data.db.token.TokenDataSourceImpl
 import com.shkitter.data.db.topic.TopicDataSourceImpl
@@ -8,9 +10,13 @@ import com.shkitter.data.db.user.UserDataSourceImpl
 import com.shkitter.data.files.FilesDataSourceImpl
 import com.shkitter.domain.auth.AuthService
 import com.shkitter.domain.auth.AuthServiceImpl
+import com.shkitter.domain.chat.ChatDataSource
+import com.shkitter.domain.chat.ChatService
+import com.shkitter.domain.chat.ChatServiceImpl
 import com.shkitter.domain.common.jwt.Jwt
 import com.shkitter.domain.common.utils.SystemEnvVariablesUtil
 import com.shkitter.domain.files.FilesDataSource
+import com.shkitter.domain.message.MessageDataSource
 import com.shkitter.domain.profile.ProfileDataSource
 import com.shkitter.domain.profile.ProfileService
 import com.shkitter.domain.profile.ProfileServiceImpl
@@ -47,6 +53,8 @@ object KoinModules {
                 storePath = SystemEnvVariablesUtil.filesStorePath
             )
         }
+        factory<ChatDataSource> { ChatDataSourceImpl(db = get()) }
+        factory<MessageDataSource> { MessageDataSourceImpl(db = get()) }
     }
 
     private val serviceModule = module {
@@ -58,7 +66,6 @@ object KoinModules {
                 jwt = get()
             )
         }
-
         factory<ProfileService> {
             ProfileServiceImpl(
                 profileDataSource = get(),
@@ -67,10 +74,9 @@ object KoinModules {
                 filesDataSource = get()
             )
         }
-
         factory<TopicService> { TopicServiceImpl(topicDataSource = get()) }
-
         factory<UserService> { UserServiceImpl(userDataSource = get(), profileDataSource = get()) }
+        factory<ChatService> { ChatServiceImpl(chatDataSource = get(), userDataSource = get()) }
     }
 
     private val jwtModule = module {

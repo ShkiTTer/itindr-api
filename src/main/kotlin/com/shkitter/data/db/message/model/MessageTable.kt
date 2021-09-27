@@ -3,6 +3,7 @@ package com.shkitter.data.db.message.model
 import com.shkitter.data.db.attachemnt.AttachmentEntity
 import com.shkitter.data.db.attachemnt.AttachmentTable
 import com.shkitter.data.db.chat.ChatTable
+import com.shkitter.data.db.user.UserEntity
 import com.shkitter.data.db.user.UserTable
 import com.shkitter.domain.common.utils.DateTimeUtils
 import com.shkitter.domain.message.model.Message
@@ -25,8 +26,8 @@ class MessageEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var text by MessageTable.text
     var createdAt by MessageTable.createdAt
     var chatId by MessageTable.chatId
-    var userId by MessageTable.userId
 
+    var user by UserEntity referencedOn MessageTable.userId
     var attachments by AttachmentEntity via AttachmentTable
 
     fun toDomain() = Message(
@@ -34,7 +35,7 @@ class MessageEntity(id: EntityID<UUID>) : UUIDEntity(id) {
         text = text,
         createdAt = DateTimeUtils.fromSeconds(createdAt),
         chatId = chatId.value,
-        userId = userId.value,
+        userProfile = user.profile.toDomain(),
         attachments = attachments.map { it.toDomain() }
     )
 }

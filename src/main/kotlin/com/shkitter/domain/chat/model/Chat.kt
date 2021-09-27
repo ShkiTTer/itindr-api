@@ -1,9 +1,10 @@
 package com.shkitter.domain.chat.model
 
+import com.shkitter.domain.profile.model.Profile
 import java.util.*
 
 data class Chat(
     val id: UUID,
-    val firstUserId: UUID,
-    val secondUserId: UUID
+    val firstUser: Profile,
+    val secondUser: Profile
 )

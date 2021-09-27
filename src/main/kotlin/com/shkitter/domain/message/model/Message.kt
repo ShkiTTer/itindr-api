@@ -1,6 +1,7 @@
 package com.shkitter.domain.message.model
 
 import com.shkitter.domain.attachment.Attachment
+import com.shkitter.domain.profile.model.Profile
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -9,6 +10,6 @@ data class Message(
     val text: String,
     val createdAt: ZonedDateTime,
     val chatId: UUID,
-    val userId: UUID,
+    val userProfile: Profile,
     val attachments: List<Attachment>
 )

@@ -1,5 +1,6 @@
 package com.shkitter.data.db.chat
 
+import com.shkitter.data.db.user.UserEntity
 import com.shkitter.data.db.user.UserTable
 import com.shkitter.domain.chat.model.Chat
 import org.jetbrains.exposed.dao.UUIDEntity
@@ -19,9 +20,12 @@ class ChatEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var firstUserId by ChatTable.firstUserId
     var secondUserId by ChatTable.secondUserId
 
+    val firstUser by UserEntity referencedOn ChatTable.firstUserId
+    val secondUser by UserEntity referencedOn ChatTable.secondUserId
+
     fun toDomain() = Chat(
         id = id.value,
-        firstUserId = firstUserId.value,
-        secondUserId = secondUserId.value
+        firstUser = firstUser.profile.toDomain(),
+        secondUser = secondUser.profile.toDomain()
     )
 }

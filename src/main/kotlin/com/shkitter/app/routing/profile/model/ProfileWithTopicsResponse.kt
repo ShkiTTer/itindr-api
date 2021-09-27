@@ -1,6 +1,6 @@
 package com.shkitter.app.routing.profile.model
 
-import com.shkitter.app.common.extensions.createAvatarUrl
+import com.shkitter.app.common.extensions.createFileUrl
 import com.shkitter.app.routing.topic.model.TopicResponse
 import com.shkitter.domain.profile.model.ProfileWithTopics
 import kotlinx.serialization.Serializable
@@ -19,7 +19,7 @@ data class ProfileWithTopicsResponse(
             userId = data.userId.toString(),
             name = data.name,
             aboutMyself = data.aboutMyself,
-            avatar = data.avatar?.createAvatarUrl(scheme),
+            avatar = data.avatar?.createFileUrl(scheme),
             topics = data.topics.map { TopicResponse.fromDomain(it) }
         )
     }
