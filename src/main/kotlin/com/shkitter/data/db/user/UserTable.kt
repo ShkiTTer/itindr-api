@@ -1,5 +1,7 @@
 package com.shkitter.data.db.user
 
+import com.shkitter.data.db.chat.ChatEntity
+import com.shkitter.data.db.chat.ChatTable
 import com.shkitter.domain.user.model.User
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
