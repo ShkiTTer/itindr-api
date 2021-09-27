@@ -86,3 +86,11 @@ object OffsetValidationRule : ValidationRule<Int?>() {
         else -> ValidationResult.Valid
     }
 }
+
+object IdValidationRule : ValidationRule<String?>() {
+    override fun validate(value: String?): ValidationResult = when {
+        value.isNullOrBlank() -> ValidationResult.Error("ID is required")
+        value.toUUID() == null -> ValidationResult.Error("Invalid ID")
+        else -> ValidationResult.Valid
+    }
+}
