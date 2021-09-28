@@ -14,6 +14,7 @@ tags:
   - name: Profile
   - name: Topic
   - name: User
+  - name: Chat
 
 paths:
   /v1/auth/login:
@@ -222,6 +223,23 @@ paths:
       summary: 'Getting a list of all users'
       security:
         - BearerAuth: [ ]
+      parameters:
+        - in: query
+          name: 'limit'
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            example: 10
+          description: 'Quantity per request'
+        - in: query
+          name: 'offset'
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            example: 0
+          description: 'Offset for the selection'
       responses:
         200:
           $ref: '#/components/responses/ProfileWithTopicList'
@@ -264,6 +282,14 @@ paths:
     post:
       security:
         - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: 'userId'
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 'ID of user'
       responses:
         200:
           $ref: '#/components/responses/LikeResult'
@@ -287,6 +313,14 @@ paths:
     post:
       security:
         - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: 'userId'
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 'ID of user'
       responses:
         204:
           description: 'Dislike successfully posted'
@@ -304,6 +338,148 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       tags:
         - User
+
+  /v1/chat:
+    get:
+      summary: 'Getting a list of chats for current user'
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          $ref: '#/components/responses/ChatWithLastMessageList'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - Chat
+
+    post:
+      summary: 'Create new chat'
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChatBoby'
+            example:
+              userId: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+      responses:
+        200:
+          $ref: '#/components/responses/Chat'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        409:
+          $ref: '#/components/responses/Conflict'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - Chat
+
+  /v1/chat/{chatId}/message:
+    get:
+      summary: 'Getting a list of message for chat'
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: 'chatId'
+          description: 'ID of chat'
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: 'limit'
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            example: 10
+          description: 'Quantity per request'
+        - in: query
+          name: 'offset'
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            example: 0
+          description: 'Offset for the selection'
+      responses:
+        200:
+          $ref: '#/components/responses/ChatWithLastMessageList'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - Chat
+
+    post:
+      summary: 'Send message to chat'
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: 'chatId'
+          description: 'ID of chat'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                messageText:
+                  type: string
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - messageText
+      responses:
+        200:
+          $ref: '#/components/responses/Chat'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        409:
+          $ref: '#/components/responses/Conflict'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - Chat
 
 components:
   securitySchemes:
@@ -361,6 +537,14 @@ components:
             format: uuid
       required:
         - name
+
+    CreateChatBoby:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+          required: true
 
   responses:
     BadRequest:
@@ -485,6 +669,7 @@ components:
                 items:
                   $ref: '#/components/responses/TopicInfo'
             required:
+              - userId
               - name
               - topics
             example:
@@ -525,6 +710,32 @@ components:
                     title: 'Kotlin'
                   - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
                     title: 'Ktor'
+
+    Profile:
+      description: 'Profile info with topics'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                format: uuid
+              name:
+                type: string
+              aboutMyself:
+                type: string
+              avatar:
+                type: string
+                format: url
+            required:
+              - userId
+              - name
+            example:
+              userId: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+              name: 'Иван'
+              aboutMyself: null
+              avatar: null
 
     TopicInfo:
       description: 'Info about topic'
@@ -569,3 +780,121 @@ components:
               isMutual:
                 type: boolean
                 example: true
+                required: true
+
+    MessageInfo:
+      description: 'Info about message'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              text:
+                type: string
+              createdAt:
+                type: string
+                format: date-time
+              user:
+                $ref: '#/components/responses/Profile'
+              attachments:
+                type: array
+                items:
+                  type: string
+                  format: url
+            required:
+              - id
+              - text
+              - createdAt
+              - user
+            example:
+              id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+              text: 'Example message'
+              createdAt: '2011-12-03T10:15:30+01:00[Europe/Paris]'
+              user:
+                userId: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                name: 'Ивае'
+                aboutMyself: null
+                avatar: null
+              attachments: [ ]
+
+    Chat:
+      description: 'Info about chat'
+      content:
+        application/json:
+          schema:
+            properties:
+              id:
+                type: string
+                format: uuid
+              title:
+                type: string
+              avatar:
+                type: string
+                format: url
+            required:
+              - id
+              - title
+            example:
+              id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+              title: 'Иван'
+              avatar: null
+
+    ChatWithLastMessage:
+      description: 'Info about chat with last message'
+      content:
+        application/json:
+          schema:
+            properties:
+              id:
+                type: string
+                format: uuid
+              title:
+                type: string
+              avatar:
+                type: string
+                format: url
+              lastMessage:
+                $ref: '#/components/responses/MessageInfo'
+            required:
+              - id
+              - title
+            example:
+              id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+              title: 'Иван'
+              avatar: null
+              lastMessage:
+                id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                text: 'Example message'
+                createdAt: '2011-12-03T10:15:30+01:00[Europe/Paris]'
+                user:
+                  userId: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                  name: 'Ивае'
+                  aboutMyself: null
+                  avatar: null
+                attachments: [ ]
+
+    ChatWithLastMessageList:
+      description: 'List of chats'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/responses/ChatWithLastMessage'
+          example:
+            - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+              title: 'Иван'
+              avatar: null
+              lastMessage:
+                id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                text: 'Example message'
+                createdAt: '2011-12-03T10:15:30+01:00[Europe/Paris]'
+                user:
+                  userId: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                  name: 'Ивае'
+                  aboutMyself: null
+                  avatar: null
+                attachments: [ ]

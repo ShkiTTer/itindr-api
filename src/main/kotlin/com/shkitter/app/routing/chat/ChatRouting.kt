@@ -18,7 +18,7 @@ import io.ktor.request.*
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 
-private const val PART_MESSAGE = "message_text"
+private const val PART_MESSAGE = "messageText"
 
 fun Routing.configureChat() {
 
