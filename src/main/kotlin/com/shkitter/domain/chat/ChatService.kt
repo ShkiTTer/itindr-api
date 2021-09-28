@@ -8,7 +8,8 @@ import java.util.*
 
 interface ChatService {
     suspend fun getAllChatsForUser(userId: UUID): List<ChatWithLastMessage>
-    suspend fun createChat(firstUserId: UUID, secondUserId: UUID): Chat
+    suspend fun getChatMessages(chatId: UUID, limit: Int, offset: Int): List<Message>
 
+    suspend fun createChat(firstUserId: UUID, secondUserId: UUID): Chat
     suspend fun createMessage(newMessage: NewMessage): Message
 }

@@ -1,5 +1,7 @@
 package com.shkitter.data.db.chat
 
+import com.shkitter.data.db.message.model.MessageEntity
+import com.shkitter.data.db.message.model.MessageTable
 import com.shkitter.data.db.user.UserEntity
 import com.shkitter.data.db.user.UserTable
 import com.shkitter.domain.chat.model.Chat
@@ -22,6 +24,7 @@ class ChatEntity(id: EntityID<UUID>) : UUIDEntity(id) {
 
     val firstUser by UserEntity referencedOn ChatTable.firstUserId
     val secondUser by UserEntity referencedOn ChatTable.secondUserId
+    val messages by MessageEntity via MessageTable
 
     fun toDomain() = Chat(
         id = id.value,

@@ -76,5 +76,15 @@ fun Routing.configureChat() {
 
             call.respondSuccess(MessageResponse.fromDomain(data = newMessage, scheme = call.scheme))
         }
+
+        get(ChatWithIdV1.Message.getPath()) {
+            val chatId = call.getPathParameter<String>(ChatWithIdV1.paramName).toUUID()
+                ?: throw BadRequestException("Invalid chat id")
+            val limit = call.getQueryParameter<Int>(ChatWithIdV1.Message.limitParameterName)
+            val offset = call.getQueryParameter<Int>(ChatWithIdV1.Message.offsetParameterName)
+
+            val messages = chatService.getChatMessages(chatId = chatId, limit = limit, offset = offset)
+            call.respondSuccess(messages.map { MessageResponse.fromDomain(data = it, scheme = call.scheme) })
+        }
     }
 }

@@ -29,6 +29,12 @@ inline fun <reified T> ApplicationCall.getPathParameter(name: String): T =
 inline fun <reified T> ApplicationCall.getPathParameterOrNull(name: String): T? =
     this.parameters[name] as? T
 
+inline fun <reified T> ApplicationCall.getQueryParameter(name: String): T =
+    this.request.queryParameters[name] as? T ?: throw BadRequestException("Query parameter '$name' is required")
+
+inline fun <reified T> ApplicationCall.getQueryParameterOrNull(name: String): T? =
+    this.request.queryParameters[name] as? T
+
 fun ApplicationCall.principalUserIdOrThrow(): UUID {
     val userId = this.principal<UserIdPrincipal>()?.name
     if (userId.isNullOrBlank()) throw AuthenticationException("You are not authorized")

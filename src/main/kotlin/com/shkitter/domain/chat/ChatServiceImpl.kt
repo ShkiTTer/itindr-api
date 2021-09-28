@@ -60,6 +60,11 @@ class ChatServiceImpl(
         return message.copy(attachments = attachments)
     }
 
+    override suspend fun getChatMessages(chatId: UUID, limit: Int, offset: Int): List<Message> {
+        checkChatExistOrThrow(chatId)
+        return chatDataSource.getChatMessages(chatId = chatId, limit = limit, offset = offset)
+    }
+
     private suspend fun checkUserExistOrThrow(userId: UUID) {
         userDataSource.getUserById(userId) ?: throw NotFoundException("User not found")
     }

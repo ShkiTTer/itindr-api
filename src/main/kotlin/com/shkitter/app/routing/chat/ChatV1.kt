@@ -16,5 +16,8 @@ object ChatWithIdV1 : RouteWithPathParam {
     object Message : Route {
         override val name: String = "message"
         override val parent: Route = ChatWithIdV1
+
+        val limitParameterName = "limit"
+        val offsetParameterName = "offset"
     }
 }

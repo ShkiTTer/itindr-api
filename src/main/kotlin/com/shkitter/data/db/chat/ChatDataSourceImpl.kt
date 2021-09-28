@@ -4,6 +4,7 @@ import com.shkitter.data.db.common.extensions.DatabaseDataSource
 import com.shkitter.data.db.user.UserEntity
 import com.shkitter.domain.chat.ChatDataSource
 import com.shkitter.domain.chat.model.Chat
+import com.shkitter.domain.message.model.Message
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.or
 import java.util.*
@@ -25,5 +26,9 @@ class ChatDataSourceImpl(private val db: Database) : ChatDataSource, DatabaseDat
 
     override suspend fun getChatById(chatId: UUID): Chat? = db.dbQuery {
         ChatEntity.findById(chatId)?.toDomain()
+    }
+
+    override suspend fun getChatMessages(chatId: UUID, limit: Int, offset: Int): List<Message> = db.dbQuery {
+        ChatEntity[chatId].messages.limit(n = limit, offset = offset.toLong()).map { it.toDomain() }
     }
 }
