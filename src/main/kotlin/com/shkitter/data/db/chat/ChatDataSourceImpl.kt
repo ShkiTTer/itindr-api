@@ -22,4 +22,8 @@ class ChatDataSourceImpl(private val db: Database) : ChatDataSource, DatabaseDat
             this.secondUserId = UserEntity[secondUserId].id
         }.toDomain()
     }
+
+    override suspend fun getChatById(chatId: UUID): Chat? = db.dbQuery {
+        ChatEntity.findById(chatId)?.toDomain()
+    }
 }

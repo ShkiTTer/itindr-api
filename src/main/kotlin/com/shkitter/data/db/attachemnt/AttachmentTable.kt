@@ -1,7 +1,7 @@
 package com.shkitter.data.db.attachemnt
 
 import com.shkitter.data.db.message.model.MessageTable
-import com.shkitter.domain.attachment.Attachment
+import com.shkitter.domain.attachment.model.Attachment
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

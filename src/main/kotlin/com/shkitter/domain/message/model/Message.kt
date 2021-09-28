@@ -1,6 +1,6 @@
 package com.shkitter.domain.message.model
 
-import com.shkitter.domain.attachment.Attachment
+import com.shkitter.domain.attachment.model.Attachment
 import com.shkitter.domain.profile.model.Profile
 import java.time.ZonedDateTime
 import java.util.*

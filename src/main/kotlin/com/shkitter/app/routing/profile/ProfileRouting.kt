@@ -51,7 +51,9 @@ fun Routing.configureProfile() {
                 .firstOrNull { it.name == AVATAR_MULTIPART_NAME }
                 ?: throw BadRequestException("Multipart must contains file item with name - $AVATAR_MULTIPART_NAME")
 
-            val fileName = filePart.originalFileName ?: throw BadRequestException("File must have original name")
+            val fileName = filePart.originalFileName?.let {
+                it.ifBlank { null }
+            } ?: throw BadRequestException("File must have original name")
 
             profileService.uploadAvatar(
                 userId = userId,

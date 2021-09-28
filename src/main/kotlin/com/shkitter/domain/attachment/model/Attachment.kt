@@ -1,4 +1,4 @@
-package com.shkitter.domain.attachment
+package com.shkitter.domain.attachment.model
 
 import java.util.*
 

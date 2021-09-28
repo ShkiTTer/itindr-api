@@ -1,6 +1,7 @@
 package com.shkitter.app.di
 
 import com.shkitter.data.db.Database
+import com.shkitter.data.db.attachemnt.AttachmentDataSourceImpl
 import com.shkitter.data.db.chat.ChatDataSourceImpl
 import com.shkitter.data.db.message.MessageDataSourceImpl
 import com.shkitter.data.db.profile.ProfileDataSourceImpl
@@ -8,6 +9,7 @@ import com.shkitter.data.db.token.TokenDataSourceImpl
 import com.shkitter.data.db.topic.TopicDataSourceImpl
 import com.shkitter.data.db.user.UserDataSourceImpl
 import com.shkitter.data.files.FilesDataSourceImpl
+import com.shkitter.domain.attachment.AttachmentDataSource
 import com.shkitter.domain.auth.AuthService
 import com.shkitter.domain.auth.AuthServiceImpl
 import com.shkitter.domain.chat.ChatDataSource
@@ -55,6 +57,7 @@ object KoinModules {
         }
         factory<ChatDataSource> { ChatDataSourceImpl(db = get()) }
         factory<MessageDataSource> { MessageDataSourceImpl(db = get()) }
+        factory<AttachmentDataSource> { AttachmentDataSourceImpl(db = get()) }
     }
 
     private val serviceModule = module {
@@ -80,7 +83,8 @@ object KoinModules {
             ChatServiceImpl(
                 chatDataSource = get(),
                 userDataSource = get(),
-                messageDataSource = get()
+                messageDataSource = get(),
+                filesDataSource = get()
             )
         }
     }
