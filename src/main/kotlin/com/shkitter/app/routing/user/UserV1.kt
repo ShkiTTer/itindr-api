@@ -7,6 +7,9 @@ object UserV1 : Route {
     override val name: String = "user"
     override val parent: Route = Route.MobileV1
 
+    val limitParameterName = "limit"
+    val offsetParameterName = "offset"
+
     object Feed : Route {
         override val name: String = "feed"
         override val parent: Route = UserV1

@@ -10,6 +10,7 @@ import com.shkitter.domain.chat.ChatService
 import com.shkitter.domain.common.exceptions.BadRequestException
 import com.shkitter.domain.common.extensions.toUUID
 import com.shkitter.domain.message.model.NewMessage
+import com.shkitter.domain.validation.OffsetValidationRule
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.content.*
@@ -81,7 +82,9 @@ fun Routing.configureChat() {
             val chatId = call.getPathParameter<String>(ChatWithIdV1.paramName).toUUID()
                 ?: throw BadRequestException("Invalid chat id")
             val limit = call.getQueryParameter<Int>(ChatWithIdV1.Message.limitParameterName)
+                .also { OffsetValidationRule.validate(it).throwBadRequestIfError() }
             val offset = call.getQueryParameter<Int>(ChatWithIdV1.Message.offsetParameterName)
+                .also { OffsetValidationRule.validate(it).throwBadRequestIfError() }
 
             val messages = chatService.getChatMessages(chatId = chatId, limit = limit, offset = offset)
             call.respondSuccess(messages.map { MessageResponse.fromDomain(data = it, scheme = call.scheme) })

@@ -2,11 +2,12 @@ package com.shkitter.app.routing.user
 
 import com.shkitter.app.common.extensions.*
 import com.shkitter.app.routing.profile.model.ProfileWithTopicsResponse
-import com.shkitter.app.routing.user.model.GetAllUsersRequestDto
 import com.shkitter.app.routing.user.model.LikeResponse
 import com.shkitter.domain.common.exceptions.BadRequestException
 import com.shkitter.domain.common.extensions.toUUID
 import com.shkitter.domain.user.UserService
+import com.shkitter.domain.validation.LimitValidationRule
+import com.shkitter.domain.validation.OffsetValidationRule
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
@@ -40,8 +41,12 @@ fun Routing.configureUserRouting() {
         }
 
         get(UserV1.getPath()) {
-            val request = call.receiveOrThrow<GetAllUsersRequestDto>().validateAndConvertToVerified()
-            val users = userService.getAllUsers(limit = request.limit, offset = request.offset)
+            val limit = call.getQueryParameter<Int>(UserV1.limitParameterName)
+                .also { LimitValidationRule.validate(it).throwBadRequestIfError() }
+            val offset = call.getQueryParameter<Int>(UserV1.offsetParameterName)
+                .also { OffsetValidationRule.validate(it).throwBadRequestIfError() }
+
+            val users = userService.getAllUsers(limit = limit, offset = offset)
             call.respondSuccess(users.map { ProfileWithTopicsResponse.fromDomain(data = it, scheme = call.scheme) })
         }
     }
