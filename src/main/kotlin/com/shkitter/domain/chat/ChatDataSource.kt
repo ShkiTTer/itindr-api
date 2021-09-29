@@ -9,4 +9,5 @@ interface ChatDataSource {
     suspend fun createChat(firstUserId: UUID, secondUserId: UUID): Chat
     suspend fun getChatById(chatId: UUID): Chat?
     suspend fun getChatMessages(chatId: UUID, limit: Int, offset: Int): List<Message>
+    suspend fun getChatBetweenUsers(firstUserId: UUID, secondUserId: UUID): Chat?
 }

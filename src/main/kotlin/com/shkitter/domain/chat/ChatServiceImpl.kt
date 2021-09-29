@@ -34,7 +34,9 @@ class ChatServiceImpl(
     override suspend fun createChat(firstUserId: UUID, secondUserId: UUID): Chat {
         checkUserExistOrThrow(firstUserId)
         checkUserExistOrThrow(secondUserId)
-        return chatDataSource.createChat(firstUserId, secondUserId)
+
+        val existChat = chatDataSource.getChatBetweenUsers(firstUserId, secondUserId)
+        return existChat ?: chatDataSource.createChat(firstUserId, secondUserId)
     }
 
     override suspend fun createMessage(newMessage: NewMessage): Message {
