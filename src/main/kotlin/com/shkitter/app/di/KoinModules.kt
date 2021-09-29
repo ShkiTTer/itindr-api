@@ -84,7 +84,8 @@ object KoinModules {
                 chatDataSource = get(),
                 userDataSource = get(),
                 messageDataSource = get(),
-                filesDataSource = get()
+                filesDataSource = get(),
+                attachmentDataSource = get()
             )
         }
     }
