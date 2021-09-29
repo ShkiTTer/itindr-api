@@ -63,6 +63,12 @@ fun Routing.configureProfile() {
 
             call.respondSuccessEmpty()
         }
+
+        delete(ProfileV1.Avatar.getPath()) {
+            val userId = call.principalUserIdOrThrow()
+            profileService.removeAvatar(userId)
+            call.respondSuccessEmpty()
+        }
     }
 }
 

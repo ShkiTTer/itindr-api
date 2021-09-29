@@ -8,4 +8,5 @@ interface ProfileService {
     suspend fun getFullProfileByUserId(userId: UUID): ProfileWithTopics
     suspend fun updateProfile(params: UpdateProfileServiceParams): ProfileWithTopics
     suspend fun uploadAvatar(userId: UUID, origFileName: String, bytes: ByteArray)
+    suspend fun removeAvatar(userId: UUID)
 }

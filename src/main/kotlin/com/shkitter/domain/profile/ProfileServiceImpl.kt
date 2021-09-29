@@ -5,9 +5,9 @@ import com.shkitter.domain.common.exceptions.NotFoundException
 import com.shkitter.domain.common.extensions.getFileExtensions
 import com.shkitter.domain.common.utils.FileUtils
 import com.shkitter.domain.files.FilesDataSource
-import com.shkitter.domain.profile.model.UpdateProfileServiceParams
 import com.shkitter.domain.profile.model.ProfileWithTopics
 import com.shkitter.domain.profile.model.UpdateProfileDataSourceParams
+import com.shkitter.domain.profile.model.UpdateProfileServiceParams
 import com.shkitter.domain.topic.TopicDataSource
 import com.shkitter.domain.user.UserDataSource
 import java.util.*
@@ -24,7 +24,7 @@ class ProfileServiceImpl(
     }
 
     override suspend fun getFullProfileByUserId(userId: UUID): ProfileWithTopics {
-        userDataSource.getUserById(userId) ?: throw NotFoundException("User with id - '$userId' not found")
+        checkUserExistOrThrow(userId)
         return profileDataSource.getFullProfileByUserId(userId)
             ?: throw NotFoundException("Profile for user with id - '$userId' not found")
     }
@@ -34,8 +34,7 @@ class ProfileServiceImpl(
             throw NotFoundException("Some topics not found")
         }
 
-        userDataSource.getUserById(params.userId)
-            ?: throw NotFoundException("User with id - '${params.userId}' not found")
+        checkUserExistOrThrow(userId = params.userId)
 
         val profileId = profileDataSource.getProfileIdByUserId(params.userId)
             ?: throw NotFoundException("Profile not found")
@@ -51,8 +50,7 @@ class ProfileServiceImpl(
             throw BadRequestException("File extension - $fileExtension is not allowed")
         }
 
-        userDataSource.getUserById(userId)
-            ?: throw NotFoundException("User with id - '$userId' not found")
+        checkUserExistOrThrow(userId)
 
         val profileId = profileDataSource.getProfileIdByUserId(userId = userId)
             ?: throw NotFoundException("Profile not found")
@@ -66,6 +64,17 @@ class ProfileServiceImpl(
         profileDataSource.updateAvatar(profileId = profileId, avatar = savedAvatarPath)
     }
 
+    override suspend fun removeAvatar(userId: UUID) {
+        checkUserExistOrThrow(userId)
+        profileDataSource.removeAvatar(userId)?.let { path ->
+            filesDataSource.removeFile(path)
+        }
+    }
+
+    private suspend fun checkUserExistOrThrow(userId: UUID) {
+        userDataSource.getUserById(userId) ?: throw NotFoundException("User with id - '$userId' not found")
+    }
+
     private fun createAvatarFileName(profileId: UUID) = "$PREFIX_AVATAR$profileId"
 
     private fun getUpdateDataSourceParams(params: UpdateProfileServiceParams) = UpdateProfileDataSourceParams(
@@ -74,4 +83,5 @@ class ProfileServiceImpl(
         userId = params.userId,
         topicIds = params.topicIds
     )
+
 }

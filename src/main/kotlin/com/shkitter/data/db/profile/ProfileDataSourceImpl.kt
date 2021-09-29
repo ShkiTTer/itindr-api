@@ -72,4 +72,12 @@ class ProfileDataSourceImpl(
     override suspend fun getAll(limit: Int, offset: Int): List<ProfileWithTopics> = db.dbQuery {
         ProfileEntity.all().limit(n = limit, offset = offset.toLong()).map { it.toDomainWithTopics() }
     }
+
+    override suspend fun removeAvatar(userId: UUID): String? = db.dbQuery {
+        val profile = UserEntity[userId].profile
+        val avatar = profile.avatar
+        profile.avatar = null
+
+        avatar
+    }
 }

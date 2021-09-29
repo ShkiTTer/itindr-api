@@ -22,13 +22,19 @@ class FilesDataSourceImpl(
         fileName: String,
         extension: String,
         bytes: ByteArray,
-        deleteOnExit: Boolean
+        deleteOnExist: Boolean
     ): String = withContext(coroutineContext) {
         val file = File("$storePath/$fileName.$extension").also {
-            if (deleteOnExit) it.deleteOnExit()
+            if (deleteOnExist && it.exists()) it.delete()
         }
         file.writeBytes(bytes)
         "$fileName.$extension"
+    }
+
+    override suspend fun removeFile(fileNameWithExtension: String) = withContext(Dispatchers.IO) {
+        File("$storePath/$fileNameWithExtension").let {
+            if (it.exists()) it.delete()
+        }
     }
 
     private fun createDirectoryIfNotExist() {
