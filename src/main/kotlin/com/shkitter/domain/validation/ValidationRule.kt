@@ -82,7 +82,7 @@ object LimitValidationRule : ValidationRule<Int?>() {
 object OffsetValidationRule : ValidationRule<Int?>() {
     override fun validate(value: Int?): ValidationResult = when {
         value == null -> ValidationResult.Error("Offset is required")
-        value <= 0 -> ValidationResult.Error("Offset must be greater than 0")
+        value < 0 -> ValidationResult.Error("Offset must be greater or equal than 0")
         else -> ValidationResult.Valid
     }
 }

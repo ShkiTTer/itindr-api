@@ -24,11 +24,11 @@ class ChatEntity(id: EntityID<UUID>) : UUIDEntity(id) {
 
     val firstUser by UserEntity referencedOn ChatTable.firstUserId
     val secondUser by UserEntity referencedOn ChatTable.secondUserId
-    val messages by MessageEntity via MessageTable
+    val messages by MessageEntity referrersOn MessageTable.chatId
 
     fun toDomain() = Chat(
         id = id.value,
-        firstUser = firstUser.profile.toDomain(),
-        secondUser = secondUser.profile.toDomain()
+        firstUser = firstUser.profile.first().toDomain(),
+        secondUser = secondUser.profile.first().toDomain()
     )
 }

@@ -40,5 +40,6 @@ class UserServiceImpl(
         }
     }
 
-    override suspend fun getAllUsers(limit: Int, offset: Int) = profileDataSource.getAll(limit, offset)
+    override suspend fun getAllUserProfiles(currentUserId: UUID, limit: Int, offset: Int) =
+        profileDataSource.getAll(currentUserId, limit, offset)
 }

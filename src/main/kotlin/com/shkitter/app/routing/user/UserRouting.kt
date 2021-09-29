@@ -20,7 +20,7 @@ fun Routing.configureUserRouting() {
     authenticate {
         post(UserV1WithId.Like.getPath()) {
             val fromUserId = call.principalUserIdOrThrow()
-            val toUserId = call.getPathParameter<String>(UserV1WithId.paramName).toUUID()
+            val toUserId = call.getPathParameter(UserV1WithId.paramName).toUUID()
                 ?: throw BadRequestException("Invalid user id")
             val likeResult = userService.likeUser(from = fromUserId, to = toUserId)
             call.respondSuccess(LikeResponse(isMutual = likeResult))
@@ -28,7 +28,7 @@ fun Routing.configureUserRouting() {
 
         post(UserV1WithId.Dislike.getPath()) {
             val fromUserId = call.principalUserIdOrThrow()
-            val toUserId = call.getPathParameter<String>(UserV1WithId.paramName).toUUID()
+            val toUserId = call.getPathParameter(UserV1WithId.paramName).toUUID()
                 ?: throw BadRequestException("Invalid user id")
             userService.dislikeUser(from = fromUserId, to = toUserId)
             call.respondSuccessEmpty()
@@ -41,12 +41,13 @@ fun Routing.configureUserRouting() {
         }
 
         get(UserV1.getPath()) {
-            val limit = call.getQueryParameter<Int>(UserV1.limitParameterName)
+            val userId = call.principalUserIdOrThrow()
+            val limit = call.getIntegerQueryParameter(UserV1.limitParameterName)
                 .also { LimitValidationRule.validate(it).throwBadRequestIfError() }
-            val offset = call.getQueryParameter<Int>(UserV1.offsetParameterName)
+            val offset = call.getIntegerQueryParameter(UserV1.offsetParameterName)
                 .also { OffsetValidationRule.validate(it).throwBadRequestIfError() }
 
-            val users = userService.getAllUsers(limit = limit, offset = offset)
+            val users = userService.getAllUserProfiles(currentUserId = userId, limit = limit, offset = offset)
             call.respondSuccess(users.map { ProfileWithTopicsResponse.fromDomain(data = it, scheme = call.scheme) })
         }
     }

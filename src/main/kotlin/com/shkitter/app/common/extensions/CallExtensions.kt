@@ -23,17 +23,11 @@ suspend fun ApplicationCall.respondSuccessEmpty() =
 suspend inline fun <reified T : Any> ApplicationCall.receiveOrThrow(): T =
     this.receiveOrNull() ?: throw BadRequestException("Request body is required")
 
-inline fun <reified T> ApplicationCall.getPathParameter(name: String): T =
-    this.parameters[name] as? T ?: throw BadRequestException("Path parameter '$name' is required")
+fun ApplicationCall.getPathParameter(name: String): String =
+    this.parameters[name] ?: throw BadRequestException("Path parameter '$name' is required")
 
-inline fun <reified T> ApplicationCall.getPathParameterOrNull(name: String): T? =
-    this.parameters[name] as? T
-
-inline fun <reified T> ApplicationCall.getQueryParameter(name: String): T =
-    this.request.queryParameters[name] as? T ?: throw BadRequestException("Query parameter '$name' is required")
-
-inline fun <reified T> ApplicationCall.getQueryParameterOrNull(name: String): T? =
-    this.request.queryParameters[name] as? T
+fun ApplicationCall.getIntegerQueryParameter(name: String): Int =
+    this.request.queryParameters[name]?.toInt() ?: throw BadRequestException("Query parameter '$name' is required")
 
 fun ApplicationCall.principalUserIdOrThrow(): UUID {
     val userId = this.principal<UserIdPrincipal>()?.name

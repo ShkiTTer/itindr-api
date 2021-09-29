@@ -1,7 +1,7 @@
 package com.shkitter.domain.profile
 
-import com.shkitter.domain.profile.model.UpdateProfileDataSourceParams
 import com.shkitter.domain.profile.model.ProfileWithTopics
+import com.shkitter.domain.profile.model.UpdateProfileDataSourceParams
 import java.util.*
 
 interface ProfileDataSource {
@@ -13,6 +13,6 @@ interface ProfileDataSource {
     suspend fun updateProfile(profileId: UUID, params: UpdateProfileDataSourceParams): ProfileWithTopics
     suspend fun removeAvatar(userId: UUID): String?
 
-    suspend fun getAll(limit: Int, offset: Int): List<ProfileWithTopics>
+    suspend fun getAll(currentUserId: UUID, limit: Int, offset: Int): List<ProfileWithTopics>
     suspend fun getUserFeed(userId: UUID): List<ProfileWithTopics>
 }

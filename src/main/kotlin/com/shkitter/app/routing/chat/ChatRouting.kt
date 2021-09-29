@@ -46,18 +46,18 @@ fun Routing.configureChat() {
 
         post(ChatWithIdV1.Message.getPath()) {
             val userId = call.principalUserIdOrThrow()
-            val chatId = call.getPathParameter<String>(ChatWithIdV1.paramName).toUUID()
+            val chatId = call.getPathParameter(ChatWithIdV1.paramName).toUUID()
                 ?: throw BadRequestException("Invalid chat id")
-            val multipart = call.receiveMultipart()
+            val multipartParts = call.receiveMultipart().readAllParts()
 
-            val messageText = multipart.readAllParts()
+            val messageText = multipartParts
                 .filterIsInstance<PartData.FormItem>()
                 .firstOrNull { it.name == PART_MESSAGE }
                 ?.value ?: throw BadRequestException("Multipart must contains message item with name - $PART_MESSAGE")
 
             if (messageText.isBlank()) throw BadRequestException("Message text is required")
 
-            val attachments = multipart.readAllParts()
+            val attachments = multipartParts
                 .filterIsInstance<PartData.FileItem>()
                 .map { attachment ->
                     val fileName = attachment.originalFileName?.let { it.ifBlank { null } }
@@ -79,11 +79,11 @@ fun Routing.configureChat() {
         }
 
         get(ChatWithIdV1.Message.getPath()) {
-            val chatId = call.getPathParameter<String>(ChatWithIdV1.paramName).toUUID()
+            val chatId = call.getPathParameter(ChatWithIdV1.paramName).toUUID()
                 ?: throw BadRequestException("Invalid chat id")
-            val limit = call.getQueryParameter<Int>(ChatWithIdV1.Message.limitParameterName)
+            val limit = call.getIntegerQueryParameter(ChatWithIdV1.Message.limitParameterName)
                 .also { OffsetValidationRule.validate(it).throwBadRequestIfError() }
-            val offset = call.getQueryParameter<Int>(ChatWithIdV1.Message.offsetParameterName)
+            val offset = call.getIntegerQueryParameter(ChatWithIdV1.Message.offsetParameterName)
                 .also { OffsetValidationRule.validate(it).throwBadRequestIfError() }
 
             val messages = chatService.getChatMessages(chatId = chatId, limit = limit, offset = offset)

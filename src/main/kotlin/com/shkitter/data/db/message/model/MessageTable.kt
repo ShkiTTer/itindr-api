@@ -29,14 +29,14 @@ class MessageEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var userId by MessageTable.userId
 
     val user by UserEntity referencedOn MessageTable.userId
-    val attachments by AttachmentEntity via AttachmentTable
+    val attachments by AttachmentEntity referrersOn AttachmentTable.messageId
 
     fun toDomain() = Message(
         id = id.value,
         text = text,
         createdAt = DateTimeUtils.fromSeconds(createdAt),
         chatId = chatId.value,
-        userProfile = user.profile.toDomain(),
+        userProfile = user.profile.first().toDomain(),
         attachments = attachments.map { it.toDomain() }
     )
 }

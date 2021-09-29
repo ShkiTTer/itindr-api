@@ -22,7 +22,7 @@ class UserEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var password by UserTable.password
     var salt by UserTable.salt
 
-    val profile by ProfileEntity referencedOn ProfileTable.userId
+    val profile by ProfileEntity referrersOn ProfileTable.userId
 
     fun toDomain() = User(
         id = id.value,
