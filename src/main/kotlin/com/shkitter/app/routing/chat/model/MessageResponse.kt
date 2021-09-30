@@ -19,7 +19,7 @@ data class MessageResponse(
         fun fromDomain(data: Message, scheme: String) = MessageResponse(
             id = data.id.toString(),
             text = data.text,
-            createdAt = data.createdAt.format(DateTimeFormatter.ISO_DATE_TIME),
+            createdAt = data.createdAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
             attachments = data.attachments.map { it.file.createFileUrl(scheme = scheme) },
             user = ProfileResponse.fromDomain(data = data.userProfile, scheme = scheme)
         )

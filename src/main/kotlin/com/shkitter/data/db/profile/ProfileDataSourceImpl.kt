@@ -53,8 +53,7 @@ class ProfileDataSourceImpl(
         val currentUserProfile = ProfileEntity.find { ProfileTable.userId eq userId }.first()
         val contactUsers = LikeEntity
             .find {
-                ((LikesTable.from eq userId) and (LikesTable.to eq currentUserProfile.userId)) or
-                    ((LikesTable.from eq currentUserProfile.userId) and (LikesTable.to eq userId))
+                (LikesTable.from eq userId) or (LikesTable.to eq userId)
             }
             .map { if (it.from.value != userId) it.from else it.to }
             .distinct()
