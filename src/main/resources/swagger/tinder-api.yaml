@@ -649,13 +649,13 @@ components:
               accessToken:
                 type: string
               accessTokenExpiredAt:
-                type: integer
-                format: int64
+                type: string
+                format: date-time
               refreshToken:
                 type: string
               refreshTokenExpiredAt:
-                type: integer
-                format: int64
+                type: string
+                format: date-time
             required:
               - accessToken
               - accessTokenExpiredAt
@@ -663,9 +663,9 @@ components:
               - refreshTokenExpiredAt
           example:
             accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
-            accessTokenExpiredAt: 1632325306
+            accessTokenExpiredAt: '2011-12-03T10:15:30+01:00[Europe/Paris]'
             refreshToken: 'a3dWTmJDQkVuQlNHNGRvWU9LZW4='
-            refreshTokenExpiredAt: 1632325306
+            refreshTokenExpiredAt: '2011-12-03T10:15:30+01:00[Europe/Paris]'
 
     ProfileWithTopics:
       description: 'Profile info with topics'
