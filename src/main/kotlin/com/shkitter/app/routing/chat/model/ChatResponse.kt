@@ -15,12 +15,12 @@ data class ChatResponse(
     companion object {
         fun fromDomain(data: Chat, currentUserId: UUID, scheme: String) = ChatResponse(
             id = data.id.toString(),
-            title = if (data.firstUser.id != currentUserId) {
+            title = if (data.firstUser.userId != currentUserId) {
                 data.firstUser.name
             } else {
                 data.secondUser.name
             },
-            avatar = if (data.firstUser.id != currentUserId) {
+            avatar = if (data.firstUser.userId != currentUserId) {
                 data.firstUser.avatar?.createFileUrl(scheme = scheme)
             } else {
                 data.secondUser.avatar?.createFileUrl(scheme = scheme)
