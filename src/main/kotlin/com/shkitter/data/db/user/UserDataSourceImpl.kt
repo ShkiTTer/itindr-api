@@ -8,6 +8,7 @@ import com.shkitter.domain.user.model.FavoriteEventType
 import com.shkitter.domain.user.model.User
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.or
 import java.util.*
 
 class UserDataSourceImpl(private val db: Database) : UserDataSource, DatabaseDataSource {
@@ -53,5 +54,13 @@ class UserDataSourceImpl(private val db: Database) : UserDataSource, DatabaseDat
         LikeEntity.find {
             (LikesTable.from eq from) and (LikesTable.to eq to)
         }.firstOrNull() != null
+    }
+
+    override suspend fun hasMutualLike(firstUserId: UUID, secondUserId: UUID): Boolean = db.dbQuery {
+        !LikeEntity.find {
+            (((LikesTable.from eq firstUserId) and (LikesTable.to eq secondUserId)) or
+                ((LikesTable.from eq secondUserId) and (LikesTable.to eq firstUserId))) and
+                (LikesTable.type eq FavoriteEventType.LIKE)
+        }.empty()
     }
 }

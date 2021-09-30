@@ -34,6 +34,7 @@ class ChatServiceImpl(
     override suspend fun createChat(firstUserId: UUID, secondUserId: UUID): Chat {
         checkUserExistOrThrow(firstUserId)
         checkUserExistOrThrow(secondUserId)
+        checkExistMutualLike(firstUserId, secondUserId)
 
         val existChat = chatDataSource.getChatBetweenUsers(firstUserId, secondUserId)
         return existChat ?: chatDataSource.createChat(firstUserId, secondUserId)
@@ -73,6 +74,12 @@ class ChatServiceImpl(
 
     private suspend fun checkChatExistOrThrow(chatId: UUID) {
         chatDataSource.getChatById(chatId) ?: throw NotFoundException("Chat not found")
+    }
+
+    private suspend fun checkExistMutualLike(firstUserId: UUID, secondUserId: UUID) {
+        if (!userDataSource.hasMutualLike(firstUserId, secondUserId)) {
+            throw NotFoundException("Users have not mutual like")
+        }
     }
 
     private fun createAttachmentFileName() = "${UUID.randomUUID()}_${DateTimeUtils.getCurrentSeconds()}"
