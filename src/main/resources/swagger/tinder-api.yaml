@@ -441,7 +441,7 @@ paths:
           description: 'Offset for the selection'
       responses:
         200:
-          $ref: '#/components/responses/ChatWithLastMessageList'
+          $ref: '#/components/responses/MessageList'
         400:
           $ref: '#/components/responses/BadRequest'
         401:
@@ -483,7 +483,7 @@ paths:
                     format: binary
       responses:
         200:
-          $ref: '#/components/responses/Chat'
+          $ref: '#/components/responses/MessageInfo'
         400:
           $ref: '#/components/responses/BadRequest'
         401:
