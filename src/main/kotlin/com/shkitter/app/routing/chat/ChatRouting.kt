@@ -53,7 +53,7 @@ fun Routing.configureChat() {
             val messageText = multipartParts
                 .filterIsInstance<PartData.FormItem>()
                 .firstOrNull { it.name == PART_MESSAGE }
-                ?.value.orEmpty()
+                ?.value?.let { it.ifBlank { null } }
 
             val attachments = multipartParts
                 .filterIsInstance<PartData.FileItem>()
@@ -64,7 +64,7 @@ fun Routing.configureChat() {
                     NewAttachment(origFileName = fileName, bytes = attachment.streamProvider().readAllBytes())
                 }
 
-            if (messageText.isBlank() && attachments.isEmpty()) throw BadRequestException("Message text or attachments is required")
+            if (messageText.isNullOrBlank() && attachments.isEmpty()) throw BadRequestException("Message text or attachments is required")
 
             val newMessage = chatService.createMessage(
                 NewMessage(

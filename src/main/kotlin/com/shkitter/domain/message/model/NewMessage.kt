@@ -6,6 +6,6 @@ import java.util.*
 data class NewMessage(
     val chatId: UUID,
     val userId: UUID,
-    val text: String,
+    val text: String?,
     val attachments: List<NewAttachment>
 )

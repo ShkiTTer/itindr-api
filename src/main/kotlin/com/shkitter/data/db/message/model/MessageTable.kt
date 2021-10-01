@@ -14,7 +14,7 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 import java.util.*
 
 object MessageTable : UUIDTable(name = "messages") {
-    val text = text(name = "text")
+    val text = text(name = "text").nullable().default(null)
     val createdAt = long(name = "created_at").default(DateTimeUtils.getCurrentSeconds())
     val chatId = reference(name = "chat_id", foreign = ChatTable)
     val userId = reference(name = "user_id", foreign = UserTable)

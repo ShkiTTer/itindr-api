@@ -22,7 +22,7 @@ class MessageDataSourceImpl(private val db: Database) : MessageDataSource, Datab
             ?.toDomain()
     }
 
-    override suspend fun createMessage(userId: UUID, chatId: UUID, text: String): Message = db.dbQuery {
+    override suspend fun createMessage(userId: UUID, chatId: UUID, text: String?): Message = db.dbQuery {
         MessageEntity.new {
             this.userId = UserEntity[userId].id
             this.chatId = ChatEntity[chatId].id

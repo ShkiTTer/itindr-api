@@ -481,8 +481,6 @@ paths:
                   items:
                     type: string
                     format: binary
-              required:
-                - messageText
       responses:
         200:
           $ref: '#/components/responses/Chat'
@@ -918,3 +916,22 @@ components:
                   aboutMyself: null
                   avatar: null
                 attachments: [ ]
+
+    MessageList:
+      description: 'List of message'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/responses/MessageInfo'
+          example:
+            - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+              text: 'Example message'
+              createdAt: '2011-12-03T10:15:30+01:00[Europe/Paris]'
+              user:
+                userId: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                name: 'Ивае'
+                aboutMyself: null
+                avatar: null
+              attachments: [ ]

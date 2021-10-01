@@ -7,7 +7,7 @@ import java.util.*
 
 data class Message(
     val id: UUID,
-    val text: String,
+    val text: String?,
     val createdAt: ZonedDateTime,
     val chatId: UUID,
     val userProfile: Profile,

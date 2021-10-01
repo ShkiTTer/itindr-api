@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter
 @Serializable
 data class MessageResponse(
     val id: String,
-    val text: String,
+    val text: String?,
     val createdAt: String,
     val attachments: List<String>,
     val user: ProfileResponse

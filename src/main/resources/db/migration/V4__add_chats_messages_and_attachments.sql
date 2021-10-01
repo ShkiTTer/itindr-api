@@ -8,7 +8,7 @@ create table chats
 create table messages
 (
     id         uuid primary key,
-    "text"     text   not null,
+    "text"     text,
     created_at bigint not null,
     chat_id    uuid references chats (id) on delete cascade,
     user_id    uuid references users (id) on delete cascade
