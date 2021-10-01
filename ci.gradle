@@ -3,25 +3,11 @@ import java.time.LocalDateTime
 /**
  * This file should be added to /app folder
  *
- * Add next code to 'build.gradle' file
- *  Example of use:
- *
- * ```
- *  apply from: "ci.gradle"
- *  android {
- *      defaultConfig {
- *          readProperties()
- *          setPropertiesOnBuildServer()
- *      }
- *  }
- * ```
- *
  *  Create 'version.properties' file at /app
  *
  *  Example of 'version.properties' file:
  *  ```
  *  VER_NAME=1.0.0
- *  VER_CODE=1
  *  BUILD=35
  *  ```
  *
