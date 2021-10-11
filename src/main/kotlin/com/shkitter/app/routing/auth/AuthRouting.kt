@@ -31,7 +31,7 @@ fun Routing.configureAuthRouting() {
     }
 
     authenticate {
-        post(AuthV1.Logout.getPath()) {
+        delete(AuthV1.Logout.getPath()) {
             val userId = call.principalUserIdOrThrow()
             authService.logout(userId)
             call.respondSuccessEmpty()
