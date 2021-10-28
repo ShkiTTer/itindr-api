@@ -5,6 +5,7 @@ import com.shkitter.data.db.common.extensions.DatabaseDataSource
 import com.shkitter.data.db.message.model.MessageEntity
 import com.shkitter.data.db.message.model.MessageTable
 import com.shkitter.data.db.user.UserEntity
+import com.shkitter.domain.common.utils.DateTimeUtils
 import com.shkitter.domain.message.MessageDataSource
 import com.shkitter.domain.message.model.Message
 import org.jetbrains.exposed.sql.Database
@@ -27,6 +28,7 @@ class MessageDataSourceImpl(private val db: Database) : MessageDataSource, Datab
             this.userId = UserEntity[userId].id
             this.chatId = ChatEntity[chatId].id
             this.text = text
+            this.createdAt = DateTimeUtils.getCurrentSeconds()
         }.toDomain()
     }
 }
