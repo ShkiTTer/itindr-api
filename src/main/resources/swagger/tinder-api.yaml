@@ -866,23 +866,18 @@ components:
         application/json:
           schema:
             properties:
-              id:
-                type: string
-                format: uuid
-              title:
-                type: string
-              avatar:
-                type: string
-                format: url
+              chat:
+                $ref: '#/components/responses/Chat'
               lastMessage:
                 $ref: '#/components/responses/MessageInfo'
             required:
               - id
               - title
             example:
-              id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
-              title: 'Иван'
-              avatar: null
+              chat:
+                id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                title: 'Иван'
+                avatar: null
               lastMessage:
                 id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
                 text: 'Example message'
@@ -903,9 +898,10 @@ components:
             items:
               $ref: '#/components/responses/ChatWithLastMessage'
           example:
-            - id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
-              title: 'Иван'
-              avatar: null
+            - chat:
+                id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
+                title: 'Иван'
+                avatar: null
               lastMessage:
                 id: 'b214f7d1-6962-4efa-8b7f-36fa5d3db104'
                 text: 'Example message'

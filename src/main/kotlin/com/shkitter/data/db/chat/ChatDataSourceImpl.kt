@@ -1,11 +1,13 @@
 package com.shkitter.data.db.chat
 
 import com.shkitter.data.db.common.extensions.DatabaseDataSource
+import com.shkitter.data.db.message.model.MessageTable
 import com.shkitter.data.db.user.UserEntity
 import com.shkitter.domain.chat.ChatDataSource
 import com.shkitter.domain.chat.model.Chat
 import com.shkitter.domain.message.model.Message
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
 import java.util.*
@@ -30,7 +32,8 @@ class ChatDataSourceImpl(private val db: Database) : ChatDataSource, DatabaseDat
     }
 
     override suspend fun getChatMessages(chatId: UUID, limit: Int, offset: Int): List<Message> = db.dbQuery {
-        ChatEntity[chatId].messages.limit(n = limit, offset = offset.toLong()).map { it.toDomain() }
+        ChatEntity[chatId].messages.orderBy(MessageTable.createdAt to SortOrder.DESC)
+            .limit(n = limit, offset = offset.toLong()).map { it.toDomain() }
     }
 
     override suspend fun getChatBetweenUsers(firstUserId: UUID, secondUserId: UUID): Chat? = db.dbQuery {
